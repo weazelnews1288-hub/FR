@@ -6,7 +6,7 @@
 <title>Weazel News</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
-<!-- Всё редактируемое — блок «НАСТРОЙКИ И КОНТЕНТ» в <script>. Ссылка на таблицу — CFG.sheetUrl. Цвета — :root в <style>. Файл должен называться index.html. -->
+<!-- Всё редактируемое — блок «НАСТРОЙКИ И КОНТЕНТ» в <script>. Ссылка на таблицу — CFG.sheetUrl. Ссылка на эфир — CFG.liveUrl. Цвета — :root в <style>. Файл должен называться index.html. -->
 <style>
 :root{--bg:#0a0a0d;--panel:#121216;--panel2:#1a1a20;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--green:#3fb765;--r:14px;--r2:10px;--pad:clamp(16px,3.4vw,96px);--fs-s:.875rem;--fs-l:1.125rem;color-scheme:dark}
 *{box-sizing:border-box;margin:0}
@@ -23,13 +23,19 @@ main{flex:1}
 .top{background:#0b0b0e;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
 .top .wrap{display:flex;align-items:center;gap:1.6rem;height:4.2rem}
 .logo{display:flex;align-items:center;gap:.5rem;font:italic 800 1.9rem/1 'Onest',sans-serif;letter-spacing:-.04em;text-transform:uppercase}
-.logo b{background:var(--red);padding:.2rem .6rem .2rem .45rem;font-size:1.55rem;transform:skewX(-8deg);display:inline-block;border-radius:4px}
+.logo b{background:var(--red);padding:.2rem .6rem .2rem .45rem;font-size:1.55rem;transform:skewX(-8deg);display:inline-block;border-radius:4px;color:#fff;text-shadow:0 0 .5rem #ffffffaa,0 0 1rem #ff2a33;box-shadow:0 0 .8rem #e5222a,0 0 2rem #e5222a88;animation:neon 2.8s ease-in-out infinite alternate}
+/* СВЕЧЕНИЕ «NEWS»: сила — значения в box-shadow; скорость — секунды в animation (2.8s) у .logo b */
+@keyframes neon{0%{box-shadow:0 0 .6rem #e5222acc,0 0 1.4rem #e5222a66}100%{box-shadow:0 0 1rem #ff2a33,0 0 2.6rem #e5222a99,0 0 4rem #e5222a44}}
 .slogan{font-size:.7rem;line-height:1.4;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;font-weight:500}
 nav{margin-left:auto;display:flex;gap:1.8rem;height:100%}
 nav a{display:flex;align-items:center;font-size:.95rem;font-weight:500;color:#cfcfd6;border-bottom:2px solid transparent;margin-top:2px;white-space:nowrap;transition:color .15s}
 nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .live{display:flex;align-items:center;gap:.6rem;background:var(--red);padding:.6rem 1.2rem;border-radius:var(--r2);font-weight:600;font-size:.95rem}
 .live:hover{background:var(--red2)}.live i{width:.5rem;height:.5rem;border-radius:50%;background:#fff;animation:pl 1.5s infinite}
+/* Кнопка, когда эфира нет (серая, с жёлтым «предупреждающим» огоньком) */
+.live.off{background:var(--panel2);border:1px solid #3a3a44;color:#c5c5cd}
+.live.off:hover{background:#24242b;border-color:#5a5a66}
+.live.off i{background:#ffb020;animation:none}
 @keyframes pl{50%{opacity:.25}}
 
 /* БЕГУЩАЯ СТРОКА (скорость — секунды в animation у .tt) */
@@ -198,7 +204,17 @@ const CFG = {
   email: 'mercantile1038@gmail.com',
   address: 'Little Seoul, 8144',
   copy: '© 2026 Weazel News. Все права защищены.',
-  liveUrl: '',                 // ссылка на прямой эфир; пусто = кнопка ведёт на «Контакты»
+
+  /* ПРЯМОЙ ЭФИР.
+     Идёт эфир  → вставьте ссылку между кавычками, например: liveUrl: 'https://www.twitch.tv/ваш_канал',
+                  кнопка станет красной «Прямой эфир» и откроет ссылку в новой вкладке.
+     Эфира нет  → оставьте пустые кавычки: liveUrl: '' — кнопка станет серой с надписью из liveOffText,
+                  а при нажатии появится сообщение liveOffMsg. */
+  liveUrl: '',
+  liveOnText: 'Прямой эфир',                                            // надпись на кнопке, когда эфир идёт
+  liveOffText: 'Эфира нет',                                              // надпись на кнопке, когда эфира нет
+  liveOffMsg: 'Прямого эфира сейчас нет. Загляните позже — мы сообщим о начале!',   // сообщение при нажатии
+
   heroImg: IMG('i2kWNP9'),     // картинка на главной
   mapImg: IMG('RWH8fDt'),      // карта города для билбордов
 
@@ -425,7 +441,14 @@ $('#nav').innerHTML = PAGES.map(([id,t])=>`<a href="#/${id}" data-p="${id}">${t}
 $('#fnav').innerHTML = PAGES.map(([id,t])=>`<a href="#/${id}">${t}</a>`).join('');
 $('#copy').textContent = CFG.copy;
 $('#mail').textContent = CFG.email;
-if(CFG.liveUrl){const l=$('#live');l.href=CFG.liveUrl;l.target='_blank';l.rel='noopener'}
+
+/* Кнопка эфира: есть ссылка — ведём на неё, нет — показываем «эфира нет» */
+(()=>{ const l=$('#live'), url=(CFG.liveUrl||'').trim();
+  if(url){ l.href=url; l.target='_blank'; l.rel='noopener'; l.innerHTML='<i></i>'+CFG.liveOnText }
+  else{ l.classList.add('off'); l.href='#'; l.removeAttribute('target'); l.innerHTML='<i></i>'+CFG.liveOffText;
+    l.setAttribute('aria-label',CFG.liveOffText);
+    l.addEventListener('click',e=>{ e.preventDefault(); toast(CFG.liveOffMsg) }) } })();
+
 const heads = NEWS.map(n=>n.title).concat(['Weazel News — главные события Лос-Сантоса в прямом эфире']);
 $('#tt').innerHTML = [...heads,...heads].map(t=>`<span>${t}</span>`).join('');
 addEventListener('hashchange',route);
