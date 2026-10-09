@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Weazel News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#0a0a0d;--panel:#121216;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--w:1240px}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font:16px/1.6 'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:url(https://i.imgur.com/VL677mc.jpg) center/cover;opacity:.06}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--red2);outline-offset:3px}
+.wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+.cap{font:500 .68rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* Шапка */
+.top{background:#0b0b0e;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.top .wrap{display:flex;align-items:center;gap:28px;height:66px}
+.logo{display:flex;align-items:center;gap:8px;font:italic 800 2rem/1 'Onest',sans-serif;letter-spacing:-.04em;text-transform:uppercase}
+.logo b{background:var(--red);padding:3px 9px 3px 7px;font-size:1.65rem;transform:skewX(-8deg);display:inline-block}
+.slogan{font:500 .58rem/1.5 var(--mono);letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-left:8px}
+nav{margin-left:auto;display:flex;gap:30px;height:100%}
+nav a{display:flex;align-items:center;font-size:.9rem;font-weight:500;color:#cfcfd6;border-bottom:2px solid transparent;margin-top:2px;transition:color .15s}
+nav a:hover{color:#fff}
+nav a.on{color:#fff;border-bottom-color:var(--red)}
+.live{display:flex;align-items:center;gap:10px;background:var(--red);padding:10px 24px;font-weight:600;font-size:.9rem;margin-left:12px}
+.live:hover{background:var(--red2)}
+.live i{width:8px;height:8px;border-radius:50%;background:#fff;animation:pl 1.5s infinite}
+@keyframes pl{50%{opacity:.25}}
+
+/* Бегущая строка */
+.tick{background:#0d0d11;border-bottom:1px solid var(--line);font-size:.82rem}
+.tick .wrap{display:flex;align-items:center;gap:18px;height:40px}
+.tick em{font:600 .68rem var(--mono);font-style:normal;letter-spacing:.14em;background:var(--red);padding:5px 14px;flex:none}
+.tv{overflow:hidden;flex:1;min-width:0;color:#c5c5cd}
+.tt{display:flex;width:max-content;animation:mq 50s linear infinite}
+.tv:hover .tt{animation-play-state:paused}
+.tt span{white-space:nowrap;padding-right:40px}
+.tt span::after{content:"/";padding-left:40px;color:var(--red)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.tick .cap{flex:none}
+
+/* Главная: герой */
+.hero{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.4fr);border-bottom:1px solid var(--line);min-height:410px}
+.hero-l{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:40px 24px 30px max(24px,calc((100vw - var(--w))/2 + 24px))}
+.hero h1,.phead h1{font-size:clamp(2.3rem,4.6vw,3.9rem);line-height:1.08;font-weight:700;letter-spacing:-.035em}
+.hero p.sub{color:var(--muted);font-size:1.12rem;max-width:34ch}
+.btns{display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:12px;background:var(--red);padding:14px 26px;font-weight:600;border:0;transition:background .15s}
+.btn:hover{background:var(--red2)}
+.lnk{font-weight:500;border-bottom:1px solid #fff;padding-bottom:3px}
+.lnk:hover{color:var(--red2);border-color:var(--red2)}
+.hero-r{position:relative;overflow:hidden;background:#15151a}
+.hero-r img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.hero-r::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#000c 0,#0000 45%)}
+.badge{position:absolute;top:18px;left:22px;z-index:2;background:var(--red);font:700 .72rem var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:7px 14px}
+.hero-cap{position:absolute;left:32px;bottom:26px;z-index:2}
+.hero-cap h3{font-size:1.4rem;font-weight:600}
+
+/* Блоки */
+main{flex:1}
+section.blk{padding:44px 0}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}
+.sh h2{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.sh p{color:var(--muted);margin-top:4px}
+.more{font-size:.85rem;border-bottom:1px solid var(--muted);padding-bottom:2px;color:#ddd}
+.grid{display:grid;gap:26px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .im{aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a20,#101014);border:1px solid var(--line);overflow:hidden}
+.card .im img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .im img{transform:scale(1.04)}
+.tag{font:700 .72rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--red2);margin-top:8px}
+.tag.free{color:#4cc16a}.tag.busy{color:#ff5b5b}
+.card h3{font-size:1.18rem;font-weight:600;line-height:1.35}
+.card p{color:var(--muted);font-size:.95rem}
+.date{font:400 .68rem var(--mono);letter-spacing:.12em;color:#6f6f7b;text-transform:uppercase}
+
+/* Страницы */
+.phead{padding:48px 0 12px;border-bottom:1px solid var(--line)}
+.phead p{color:var(--muted);font-size:1.1rem;max-width:56ch;margin-top:12px}
+.phead .btn{margin-top:22px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.split .im{aspect-ratio:4/3;border:1px solid var(--line);overflow:hidden;background:var(--panel)}
+.split img{width:100%;height:100%;object-fit:cover}
+.prose{max-width:68ch;color:#d4d4da;white-space:pre-line}
+.panel{background:var(--panel);border:1px solid var(--line);padding:26px}
+.panel h3{font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding-bottom:14px;border-bottom:3px solid var(--red);margin-bottom:6px}
+.pl{list-style:none;padding:0}
+.pl li{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:.94rem;line-height:1.4}
+.pl li:last-child{border:0}
+.pl b{color:#fff;white-space:nowrap;font-size:1.02rem}
+.pl li.n{display:block;color:var(--muted);font-size:.78rem;padding:4px 0 12px}
+.team{align-items:center;text-align:center;padding:30px 24px}
+.ava{width:104px;height:104px;border-radius:50%;background:#1c1c22;border:3px solid var(--red);display:grid;place-items:center;font-size:2rem;font-weight:700;overflow:hidden;margin:0 auto 14px}
+.ava img{width:100%;height:100%;object-fit:cover}
+.team .tag{margin:0 0 10px}
+.ph{display:flex;justify-content:center;gap:10px;align-items:center;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);font:500 1rem var(--mono)}
+.ph button{background:none;border:1px solid var(--line);padding:4px 10px;font-size:.75rem;color:var(--muted)}
+.ph button:hover{border-color:var(--muted);color:#fff}
+
+/* Карта билбордов */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.seg{display:flex;border:1px solid var(--line)}
+.seg button{background:none;border:0;padding:9px 18px;font-size:.88rem;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--red);color:#fff}
+.map{position:relative;border:1px solid var(--line);background:#16161b;user-select:none}
+.map>img{width:100%;height:auto;display:block}
+.mapempty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted)}
+.pin{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;border:2px solid #fff;color:#fff;font:700 .7rem var(--mono);display:grid;place-items:center;padding:0;box-shadow:0 3px 10px #000a}
+.pin.free{background:#2f9e4a}.pin.busy{background:#c0392b}
+.pin.on{transform:translate(-50%,-50%) scale(1.45);z-index:3;box-shadow:0 0 0 4px #fff6}
+.info{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:center;margin-top:16px;padding:16px;border:1px solid var(--line);background:var(--panel)}
+.info.h{display:block;text-align:center;color:var(--muted);border-style:dashed}
+.info .im{aspect-ratio:16/10;overflow:hidden}.info img{width:100%;height:100%;object-fit:cover}
+.cal{border:1px dashed var(--red);padding:14px;margin-bottom:14px;font-size:.88rem;display:flex;flex-direction:column;gap:10px;background:#d0141c14}
+.cal select{background:var(--bg);color:#fff;border:1px solid var(--line);padding:8px}
+
+/* Подвал */
+footer{border-top:1px solid var(--line);margin-top:40px;background:#0b0b0e}
+footer .wrap{display:flex;align-items:center;gap:26px;min-height:84px;flex-wrap:wrap;padding-top:18px;padding-bottom:18px}
+footer .logo{font-size:1.4rem}footer .logo b{font-size:1.15rem}
+footer small{font:400 .66rem var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+footer nav{height:auto;gap:22px}
+footer nav a{font-size:.78rem;border:0;margin:0;color:#c5c5cd}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#fff;color:#000;padding:10px 16px;font-size:.88rem;z-index:99}
+
+@media(max-width:960px){
+ .slogan{display:none}
+ .top .wrap{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:8px;gap:10px 16px}
+ nav{order:3;width:100%;margin:0;overflow-x:auto;gap:22px;height:42px}
+ .live{margin-left:auto;padding:8px 16px}
+ .hero{grid-template-columns:1fr}
+ .hero-l{padding:36px 24px}
+ .hero-r{min-height:300px}
+ .grid{grid-template-columns:1fr 1fr}
+ .split{grid-template-columns:1fr}
+ .tick .cap{display:none}
+}
+@media(max-width:620px){.grid,.g2{grid-template-columns:1fr}.info{grid-template-columns:1fr}.sh{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="#/home" aria-label="Weazel News">Weazel <b>News</b></a>
+  <span class="slogan">Правда<br>движет<br>Лос-Сантосом</span>
+  <nav id="nav" aria-label="Страницы"></nav>
+  <a class="live" id="live" href="#/contacts"><i></i>Прямой эфир</a>
+</div></header>
+
+<div class="tick"><div class="wrap">
+  <em>Срочно</em>
+  <div class="tv"><div class="tt" id="tt"></div></div>
+  <span class="cap">Лос-Сантос / Ваш город / Наши новости</span>
+</div></div>
+
+<main id="app"></main>
+
+<footer><div class="wrap">
+  <a class="logo" href="#/home">Weazel <b>News</b></a>
+  <small id="copy"></small>
+  <nav id="fnav" style="margin-left:auto"></nav>
+  <small id="mail"></small>
+</div></footer>
+
+<script>
+/* =====================  НАСТРОЙКИ И КОНТЕНТ — правьте здесь  ===================== */
+const IMG = id => 'https://i.imgur.com/' + id + '.jpg';
+const CFG = {
+  email: 'mercantile1038@gmail.com',
+  copy: '© 2026 Weazel News. Все права защищены.',
+  liveUrl: '',                       // ссылка на прямой эфир; пусто = кнопка ведёт на «Контакты»
+  heroImg: IMG('jXQsUD3'),           // большая картинка на главной
+  mapImg: IMG('RWH8fDt'),            // карта города для билбордов
+};
+// Координаты точек на карте в % [x, y]. Номер = номер билборда. Режим разметки: открыть сайт с ?calibrate
+const BB_POS = { 1:[38.4,29.1], 2:[52.0,41.7], 3:[14.5,33.2] };
+
+const NEWS = [
+  { tag:'Новости', title:'Главные события дня', date:'', img:IMG('QbtGLMP'),
+    text:'Граждане рабочих мест нашего города собрались для митинга с целью выдвинуть свои требования.' },
+  { tag:'Похороны', title:'Что происходит в городе', date:'', img:IMG('yA1rHvK'),
+    text:'Последний путь Ханны Юн.' },
+  { tag:'Помощник Губернатора', title:'Новое расследование Weazel News', date:'', img:IMG('R6CoRVc'),
+    text:'Офицеры в то же время начали ограничивать действия жителей Los-Santos, остающихся на месте происшествия — неоднократно предлагая тем забрать свои транспортные средства и покинуть территорию.' },
+];
+const WORK = [['Дизайн','Дизайн и Текст'],['Разработка','Печать и Реклама'],['Съёмка','Фото и видео']];
+
+// [номер, адрес, код, статус(1 — свободен, 0 — занят), описание]
+const D = 'Отличная видимость с основной магистрали города.', P = 'Шоссе Дель-Перро';
+const BB = [
+  [1,'Вайнвуд Бульвар',8177,0,'Высокий пешеходный и автомобильный трафик.'],
+  [2,P,7105,0,D],[3,'Веспуччи Бич',7326,0,'Зона отдыха и высокой активности в течение всего дня.'],
+  [4,P,8182,1,D],[5,P,9248,1,D],[6,P,9035,1,D],[7,P,9061,1,D],[8,P,9052,1,D],[9,P,9187,1,D],
+  [10,P,9162,0,D],[11,P,7205,1,D],[12,P,7079,0,D],[13,P,9000,0,D],[14,P,3036,1,D],
+  [15,P,3045,0,D],[16,P,2048,0,D],[17,P,3035,1,D],[18,P,3036,0,D],[19,P,3030,1,D],
+].map(([n,s,c,f,t]) => ({ n, title:`Билборд №${n} — ${s} [${c}]`, free:!!f, text:t, img:IMG('jXQsUD3') }));
+
+const PRICES = [
+  ['Печать и реклама', 'Визитки (1 шт.) — 25$\nБуклеты (10 шт.) — 400$\nЖурнал (1 шт.) — от 1000$\nМеню (20 шт.) — 500$\nРазмещение рекламы в газете — 800$\nРазмещение рекламы на портале штата — 1500$'],
+  ['Фото и видео', 'Фотосессия одиночная (до 10 фото) — 1500$\nФотосессия парная (до 10 фото) — 2000$\nОбработка одного фото — 150$\nРекламные ролики/клипы (до 3 мин) — от 3500$\nМонтаж видео — от 1500$'],
+  ['Дизайн и текст', 'Дизайн на заказ — от 1500$\nДизайн меню — от 2000$\nДизайн буклета — от 1000$\nДизайн визитки — от 2000$\n*Цена повышается в зависимости от сложности дизайна\nНаписание заказных статей — 1000$\nЗаказное интервью/репортаж — 2000$'],
+];
+const TEAM = [
+  { name:'Molly Mercantile', role:'Главный редактор', phone:'370-1077', img:'',
+    text:'Отвечает за выпуск новостей и рекламные заказы. Пишите ей по любым вопросам сотрудничества.' },
+  { name:'Ify Jelani', role:'Репортёр и фотограф', phone:'872-8988', img:'',
+    text:'Ведёт съёмки, репортажи и интервью. Принимает заказы на фотосессии и видео.' },
+];
+const BOOKING_URL = 'https://forms.gle/BiPo92EtNTtLGJX96';
+/* ================================================================================ */
+
+const PAGES = [['home','Главная'],['billboards','Билборды'],['contacts','Контакты'],['prices','Цены и услуги']];
+const $ = s => document.querySelector(s);
+const img = (src, alt='') => src ? `<img src="${src}" alt="${alt}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+const ml = t => t.split('\n').filter(Boolean);
+
+function newsCard(n){
+  return `<article class="card"><div class="im">${img(n.img, n.title)}</div>
+    <div class="tag">${n.tag}</div><h3>${n.title}</h3><p>${n.text}</p>${n.date?`<div class="date">${n.date}</div>`:''}</article>`;
+}
+function head(title, text, btn){
+  return `<div class="phead"><div class="wrap"><h1>${title}</h1>${text?`<p>${text}</p>`:''}${btn||''}</div></div>`;
+}
+
+const VIEWS = {
+  home: () => `
+    <section class="hero">
+      <div class="hero-l">
+        <span class="cap">Независимое медиа Лос-Сантоса</span>
+        <h1>Город говорит.<br>Мы показываем.</h1>
+        <p class="sub">Новости, расследования и прямые эфиры. Всё, чем живёт Лос-Сантос.</p>
+        <div class="btns"><a class="btn" href="#news" data-scroll="news">Читать новости →</a><a class="lnk" href="#/contacts">Связаться с нами</a></div>
+        <span class="cap">Люди · События · Факты · Больше, чем новости</span>
+      </div>
+      <div class="hero-r">${img(CFG.heroImg,'Лос-Сантос')}<span class="badge">В фокусе</span>
+        <div class="hero-cap"><h3>Лос-Сантос сегодня</h3><span class="cap">Больше, чем просто город</span></div></div>
+    </section>
+    <section class="blk" id="news"><div class="wrap">
+      <div class="sh"><div><h2>Последние новости</h2><p>Самые свежие события Weazel News</p></div></div>
+      <div class="grid">${NEWS.map(newsCard).join('')}</div>
+    </div></section>
+    <section class="blk"><div class="wrap"><div class="split">
+      <div><h2 style="font-size:2rem;letter-spacing:-.02em;margin-bottom:14px">Главные события города</h2>
+        <p class="prose">Главные события и новости города от Weazel News. Следите за свежими событиями, расследованиями и важными изменениями.</p></div>
+      <div class="im">${img(IMG('jXQsUD3'),'Weazel News')}</div></div></div></section>
+    <section class="blk"><div class="wrap">
+      <div class="sh"><h2>Чем мы занимаемся</h2><a class="more" href="#/prices">Цены и услуги ↗</a></div>
+      <div class="grid">${WORK.map(([t,h])=>`<div class="panel card"><div class="tag" style="margin:0">${t}</div><h3>${h}</h3></div>`).join('')}</div>
+    </div></section>`,
+
+  billboards: () => `
+    ${head('Ваша реклама — на виду у всего города','Хотите, чтобы о вашем бизнесе узнали тысячи людей? Разместите рекламу на городских билбордах и привлеките внимание прямо на улицах города. Выберите подходящую локацию, загрузите свою рекламу и сделайте свой бренд заметным.')}
+    <section class="blk"><div class="wrap" id="mapbox"></div></section>
+    <section class="blk"><div class="wrap">
+      <div class="sh"><div><h2>Доступные билборды</h2><p>Выберите подходящую локацию для вашей рекламы</p></div></div>
+      <div class="grid">${BB.map(b=>newsCard({tag:b.free?'Свободен':'Занят',title:b.title,text:b.text,img:b.img}).replace('class="tag"',`class="tag ${b.free?'free':'busy'}"`)).join('')}</div>
+      <p class="prose" style="margin-top:34px">Не упускайте возможность — займите свой билборд уже сегодня.</p>
+    </div></section>`,
+
+  contacts: () => `
+    ${head('Напишите нам','Расскажите, что нужно сделать, и мы ответим в течение двух рабочих дней.')}
+    <section class="blk"><div class="wrap">
+      <div class="sh"><h2>Как с нами связаться</h2></div>
+      <p class="prose">Little Seoul, 8144\nПочта: <a href="mailto:${CFG.email}" style="border-bottom:1px solid var(--red)">${CFG.email}</a></p>
+    </div></section>
+    <section class="blk" style="padding-top:0"><div class="wrap">
+      <div class="sh"><div><h2>Наша команда</h2><p>Люди, которые делают Weazel News каждый день</p></div></div>
+      <div class="grid g2">${TEAM.map(p=>`<article class="panel card team">
+        <div class="ava">${p.img?img(p.img,p.name):p.name.split(' ').map(w=>w[0]).join('')}</div>
+        <h3>${p.name}</h3><div class="tag">${p.role}</div><p>${p.text}</p>
+        <div class="ph"><a href="tel:${p.phone.replace(/[^\d+]/g,'')}">☎ ${p.phone}</a><button data-copy="${p.phone}" aria-label="Скопировать номер">Копировать</button></div>
+      </article>`).join('')}</div>
+    </div></section>`,
+
+  prices: () => `
+    ${head('Онлайн-запись','Выберите удобное время и забронируйте нужную услугу в несколько кликов.',`<a class="btn" href="${BOOKING_URL}" target="_blank" rel="noopener">Забронировать ↗</a>`)}
+    <section class="blk"><div class="wrap">
+      <div class="sh"><div><h2>Цены и услуги</h2><p>За услугами редакции обращайтесь по телефонам или посетите нас лично</p></div></div>
+      <div class="grid">${PRICES.map(([t,x])=>`<div class="panel"><h3>${t}</h3><ul class="pl">${ml(x).map(l=>{
+        const i=l.lastIndexOf(' — ');return i<0?`<li class="n">${l}</li>`:`<li><span>${l.slice(0,i)}</span><b>${l.slice(i+3)}</b></li>`}).join('')}</ul></div>`).join('')}</div>
+    </div></section>`,
+};
+
+/* ---- Карта билбордов ---- */
+function initMap(){
+  const box = $('#mapbox'); if(!box) return;
+  const cal = /[?&]calibrate/.test(location.search);
+  let filter = 'all', sel = null, cur = '', pos = {...BB_POS};
+  const free = BB.filter(b=>b.free).length;
+  const draw = () => {
+    const list = BB.filter(b => filter==='all' || (filter==='free')===b.free);
+    const a = BB.find(b=>b.n===sel);
+    box.innerHTML = `
+      <div class="sh"><div><h2>Карта билбордов</h2><p>Нажмите на точку, чтобы увидеть адрес и статус</p></div></div>
+      <div class="bar"><div class="seg">${[['all','Все',BB.length],['free','Свободные',free],['busy','Занятые',BB.length-free]]
+        .map(([k,t,n])=>`<button aria-pressed="${filter===k}" data-f="${k}">${t} · ${n}</button>`).join('')}</div>
+        <span class="cap">${free} из ${BB.length} свободно</span></div>
+      ${cal?`<div class="cal"><b>Режим разметки</b><span>Выберите билборд, затем кликните на карте — он встанет на место. Потом скопируйте координаты и вставьте в BB_POS.</span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><select id="cs"><option value="">— билборд —</option>${BB.map(b=>`<option value="${b.n}" ${String(b.n)===cur?'selected':''}>${pos[b.n]?'✓ ':''}${b.title}</option>`).join('')}</select>
+        <button class="btn" id="ce" style="padding:8px 16px">Скопировать (${Object.keys(pos).length}/${BB.length})</button></div></div>`:''}
+      <div class="map" id="map" ${cal&&cur?'style="cursor:crosshair"':''}>
+        ${CFG.mapImg?img(CFG.mapImg,'Карта билбордов'):'<div class="mapempty">Укажите ссылку на карту в CFG.mapImg</div>'}
+        ${list.filter(b=>pos[b.n]).map(b=>`<button class="pin ${b.free?'free':'busy'} ${sel===b.n?'on':''}" style="left:${pos[b.n][0]}%;top:${pos[b.n][1]}%" data-n="${b.n}" aria-label="${b.title}">${b.n}</button>`).join('')}
+      </div>
+      ${a?`<div class="info"><div class="im">${img(a.img,a.title)}</div><div><div class="tag ${a.free?'free':'busy'}" style="margin:0">${a.free?'Свободен':'Занят'}</div><h3 style="margin:6px 0">${a.title}</h3><p class="muted" style="color:var(--muted)">${a.text}</p></div></div>`
+        :'<div class="info h">Выберите точку на карте, чтобы увидеть подробности</div>'}`;
+    box.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;sel=null;draw()});
+    box.querySelectorAll('.pin').forEach(p=>p.onclick=e=>{e.stopPropagation();sel=+p.dataset.n;draw()});
+    if(cal){
+      $('#cs').onchange=e=>{cur=e.target.value;draw()};
+      $('#ce').onclick=()=>{const t='const BB_POS = {\n'+Object.entries(pos).sort((x,y)=>x[0]-y[0]).map(([k,v])=>`  ${k}:[${v}],`).join('\n')+'\n};';
+        navigator.clipboard?.writeText(t).then(()=>toast('Координаты скопированы'),()=>prompt('Скопируйте:',t))};
+      $('#map').onclick=e=>{ if(!cur) return; const r=e.currentTarget.getBoundingClientRect();
+        pos[cur]=[+((e.clientX-r.left)/r.width*100).toFixed(1),+((e.clientY-r.top)/r.height*100).toFixed(1)];
+        const i=BB.findIndex(b=>String(b.n)===cur); cur=BB[i+1]?String(BB[i+1].n):''; draw(); };
+    }
+  };
+  draw();
+}
+
+/* ---- Общее ---- */
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2800)}
+function route(){
+  const id = (location.hash.match(/^#\/(\w+)/)||[])[1];
+  const cur = PAGES.some(p=>p[0]===id) ? id : 'home';
+  $('#app').innerHTML = VIEWS[cur]();
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.p===cur));
+  document.title = (cur==='home' ? '' : PAGES.find(p=>p[0]===cur)[1]+' — ') + 'Weazel News';
+  if(cur==='billboards') initMap();
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{
+  const s=e.target.closest('[data-scroll]'); if(s){e.preventDefault();document.getElementById(s.dataset.scroll)?.scrollIntoView()}
+  const c=e.target.closest('[data-copy]'); if(c) navigator.clipboard?.writeText(c.dataset.copy).then(()=>toast('Номер '+c.dataset.copy+' скопирован'),()=>toast('Номер: '+c.dataset.copy));
+});
+
+$('#nav').innerHTML = PAGES.map(([id,t])=>`<a href="#/${id}" data-p="${id}">${t}</a>`).join('');
+$('#fnav').innerHTML = PAGES.map(([id,t])=>`<a href="#/${id}">${t}</a>`).join('');
+$('#copy').textContent = CFG.copy;
+$('#mail').textContent = CFG.email;
+if(CFG.liveUrl){const l=$('#live');l.href=CFG.liveUrl;l.target='_blank';l.rel='noopener'}
+const heads = NEWS.map(n=>n.title).concat(['Weazel News — главные события Лос-Сантоса в прямом эфире']);
+$('#tt').innerHTML = [...heads,...heads].map(t=>`<span>${t}</span>`).join('');
+addEventListener('hashchange',route);
+route();
+</script>
+</body>
+</html>
