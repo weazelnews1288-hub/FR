@@ -19,17 +19,18 @@
 -->
 <style>
 /* ЦВЕТА И РАЗМЕРЫ (РЕДАКТИРУЙ): --bg фон сайта, --panel фон блоков, --line линии, --red главный красный,
-   --red2 красный при наведении, --text основной текст, --muted серый текст, --w максимальная ширина сайта */
-:root{--bg:#0a0a0d;--panel:#121216;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--w:1240px}
+   --red2 красный при наведении, --text основной текст, --muted серый текст, --w максимальная ширина сайта на огромных мониторах,
+   --pad боковые отступы (сами подстраиваются под экран). Размер шрифта всего сайта тоже подстраивается — см. html{font-size:clamp(...)} */
+:root{--bg:#0a0a0d;--panel:#121216;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--w:1680px;--pad:clamp(16px,3.2vw,48px)}
 *{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font:16px/1.6 'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+html{scroll-behavior:smooth;font-size:clamp(15px,calc(13px + .35vw),19px);-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font:1rem/1.6 'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh;overflow-x:hidden;display:flex;flex-direction:column}
 body::before{content:"";position:fixed;inset:0;z-index:-1;background:url(https://i.imgur.com/VL677mc.jpg) center/cover;opacity:.06}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--red2);outline-offset:3px}
-.wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+.wrap{max-width:var(--w);margin:0 auto;padding:0 var(--pad)}
 .cap{font:500 .68rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 
 /* ШАПКА: логотип, меню, кнопка «Прямой эфир». Размер логотипа — font-size у .logo */
@@ -60,10 +61,10 @@ nav a.on{color:#fff;border-bottom-color:var(--red)}
 .tick .cap{flex:none}
 
 /* ГЛАВНАЯ: большой экран с заголовком и картинкой. Высота — min-height у .hero */
-.hero{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.4fr);border-bottom:1px solid var(--line);min-height:410px}
-.hero-l{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:40px 24px 30px max(24px,calc((100vw - var(--w))/2 + 24px))}
-.hero h1,.phead h1{font-size:clamp(2.3rem,4.6vw,3.9rem);line-height:1.08;font-weight:700;letter-spacing:-.035em}
-.hero p.sub{color:var(--muted);font-size:1.12rem;max-width:34ch}
+.hero{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.4fr);border-bottom:1px solid var(--line);min-height:clamp(380px,58vh,760px)}
+.hero-l{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:clamp(28px,5vw,64px) var(--pad) clamp(28px,4vw,52px) max(var(--pad),calc((100vw - var(--w))/2 + var(--pad)))}
+.hero h1{font-size:clamp(2rem,4.2vw,4.4rem);line-height:1.08;font-weight:700;letter-spacing:-.035em}
+.hero p.sub{color:var(--muted);font-size:1.12rem;max-width:48ch}
 .btns{display:flex;align-items:center;gap:32px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:12px;background:var(--red);padding:14px 26px;font-weight:600;border:0;transition:background .15s}
 .btn:hover{background:var(--red2)}
@@ -83,8 +84,9 @@ section.blk{padding:44px 0}
 .sh h2{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.2}
 .sh p{color:var(--muted);margin-top:4px}
 .more{font-size:.85rem;border-bottom:1px solid var(--muted);padding-bottom:2px;color:#ddd}
-.grid{display:grid;gap:26px;grid-template-columns:repeat(3,minmax(0,1fr))}
-.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* Сетка сама решает, сколько колонок поместится (от 1 на телефоне до 5 на большом мониторе) */
+.grid{display:grid;gap:clamp(16px,2vw,32px);grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))}
 .card{display:flex;flex-direction:column;gap:10px;min-width:0}
 .card .im{aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a20,#101014);border:1px solid var(--line);overflow:hidden}
 .card .im img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
@@ -96,12 +98,6 @@ section.blk{padding:44px 0}
 .date{font:400 .68rem var(--mono);letter-spacing:.12em;color:#6f6f7b;text-transform:uppercase}
 
 /* ВНУТРЕННИЕ СТРАНИЦЫ: заголовок страницы, блок «фото + текст», карточки цен, команда */
-.phead{padding:48px 0 12px;border-bottom:1px solid var(--line)}
-.phead p{color:var(--muted);font-size:1.1rem;max-width:56ch;margin-top:12px}
-.phead .btn{margin-top:22px}
-.phead.pi .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-bottom:36px}
-.phead .im{aspect-ratio:4/3;border:1px solid var(--line);overflow:hidden;background:var(--panel)}
-.phead .im img{width:100%;height:100%;object-fit:cover}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
 .split .im{aspect-ratio:4/3;border:1px solid var(--line);overflow:hidden;background:var(--panel)}
 .split img{width:100%;height:100%;object-fit:cover}
@@ -111,7 +107,7 @@ section.blk{padding:44px 0}
 .pl{list-style:none;padding:0}
 .pl li{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:.94rem;line-height:1.4}
 .pl li:last-child{border:0}
-.pl b{color:#fff;white-space:nowrap;font-size:1.02rem}
+.pl b{color:var(--red2);white-space:nowrap;font-size:1.02rem}
 .pl li.n{display:block;color:var(--muted);font-size:.78rem;padding:4px 0 12px}
 .team{align-items:center;text-align:center;padding:30px 24px}
 .ava{width:104px;height:104px;border-radius:50%;background:#1c1c22;border:3px solid var(--red);display:grid;place-items:center;font-size:2rem;font-weight:700;overflow:hidden;margin:0 auto 14px}
@@ -138,6 +134,15 @@ section.blk{padding:44px 0}
 .cal{border:1px dashed var(--red);padding:14px;margin-bottom:14px;font-size:.88rem;display:flex;flex-direction:column;gap:10px;background:#d0141c14}
 .cal select{background:var(--bg);color:#fff;border:1px solid var(--line);padding:8px}
 
+/* КАРТОЧКИ ВНУТРЕННИХ СТРАНИЦ: .st — статус билборда на фото, .pr — панель с красной линией сверху (цены, контакты, команда) */
+.bb .im{position:relative}
+.st{position:absolute;top:12px;left:12px;font:700 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;background:#2f9e4a}
+.st.busy{background:var(--red)}
+.pr{border-top:3px solid var(--red)}
+.pr h3{font-size:1.3rem;text-transform:none;letter-spacing:-.01em;border:0;padding-bottom:6px}
+.pr>.cap{display:block;margin-bottom:8px}
+.pr p{color:#d4d4da}
+
 /* ПОДВАЛ */
 footer{border-top:1px solid var(--line);margin-top:40px;background:#0b0b0e}
 footer .wrap{display:flex;align-items:center;gap:26px;min-height:84px;flex-wrap:wrap;padding-top:18px;padding-bottom:18px}
@@ -156,12 +161,10 @@ footer nav a{font-size:.78rem;border:0;margin:0;color:#c5c5cd}
  .hero{grid-template-columns:1fr}
  .hero-l{padding:36px 24px}
  .hero-r{min-height:300px}
- .grid{grid-template-columns:1fr 1fr}
  .split{grid-template-columns:1fr}
  .tick .cap{display:none}
 }
-@media(max-width:960px){.phead.pi .wrap{grid-template-columns:1fr}}
-@media(max-width:620px){.grid,.g2{grid-template-columns:1fr}.info{grid-template-columns:1fr}.sh{flex-direction:column;align-items:flex-start}}
+@media(max-width:620px){.info{grid-template-columns:1fr}.sh{flex-direction:column;align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -208,6 +211,8 @@ const CFG = {
   heroImg: IMG('jXQsUD3'),           // большая картинка на главной
   mapImg: IMG('RWH8fDt'),            // карта города для билбордов
   priceImg: IMG('RgJh7Oi'),          // картинка на странице «Цены и услуги»
+  billImg: IMG('jXQsUD3'),           // картинка в шапке страницы «Билборды»
+  contactImg: IMG('jXQsUD3'),        // картинка в шапке страницы «Контакты»
 };
 /* ТОЧКИ НА КАРТЕ: номер билборда: [отступ слева %, отступ сверху %]. Нет записи — точки на карте не будет. */
 // Координаты точек на карте в % [x, y]. Номер = номер билборда. Режим разметки: открыть сайт с ?calibrate
@@ -269,16 +274,19 @@ function newsCard(n){
   return `<article class="card"><div class="im">${img(n.img, n.title)}</div>
     <div class="tag">${n.tag}</div><h3>${n.title}</h3><p>${n.text}</p>${n.date?`<div class="date">${n.date}</div>`:''}</article>`;
 }
-// Шапка страницы: head(заголовок, текст, кнопка, картинка). Картинка и кнопка — по желанию.
-function head(title, text, btn, image){
-  const body = `<div><h1>${title}</h1>${text?`<p>${text}</p>`:''}${btn||''}</div>`;
-  return image
-    ? `<div class="phead pi"><div class="wrap">${body}<div class="im">${img(image,title)}</div></div></div>`
-    : `<div class="phead"><div class="wrap">${body}</div></div>`;
+// Шапка страницы в стиле главной: head(заголовок, текст, кнопка, картинка, надпись над заголовком, метка на фото)
+function head(t, text, btn, image, eyebrow, badge){
+  return `<section class="hero"><div class="hero-l"><span class="cap">${eyebrow||'Weazel News'}</span><h1>${t}</h1>
+    ${text?`<p class="sub">${text}</p>`:''}${btn?`<div class="btns">${btn}</div>`:''}</div>
+    <div class="hero-r">${img(image,t)}<span class="badge">${badge||'В фокусе'}</span></div></section>`;
+}
+// Карточка билборда: статус показан на фото
+function bbCard(b){
+  return `<article class="card bb"><div class="im">${img(b.img,b.title)}<span class="st ${b.free?'free':'busy'}">${b.free?'Свободен':'Занят'}</span></div><h3>${b.title}</h3><p>${b.text}</p></article>`;
 }
 
 /* СТРАНИЦЫ. Каждая вкладка — функция, возвращающая HTML. Тексты внутри — обычные, правьте как есть.
-   Хелперы: head(заголовок, текст, кнопка, картинка) — шапка страницы; newsCard(...) — карточка; img(url) — картинка. */
+   Хелперы: head(заголовок, текст, кнопка, картинка, надпись, метка) — шапка страницы; newsCard(...) — карточка; img(url) — картинка. */
 const VIEWS = {
   /* ВКЛАДКА 1 — ГЛАВНАЯ: герой → последние новости → «главные события» → «чем занимаемся» */
   home: () => `
@@ -308,24 +316,28 @@ const VIEWS = {
 
   /* ВКЛАДКА 2 — БИЛБОРДЫ: шапка → карта (initMap) → список карточек билбордов (из массива BB) */
   billboards: () => `
-    ${head('Размещение рекламы на билбордах: охватные локации и высокий трафик','<b style="color:#fff">Ваша реклама — на виду у всего города.</b> Хотите, чтобы о вашем бизнесе узнали тысячи людей? Разместите рекламу на городских билбордах и привлеките внимание прямо на улицах города. Выберите подходящую локацию, загрузите свою рекламу и сделайте свой бренд заметным.')}
+    ${head('Ваша реклама — на виду у всего города','Хотите, чтобы о вашем бизнесе узнали тысячи людей? Разместите рекламу на городских билбордах и привлеките внимание прямо на улицах города. Выберите подходящую локацию, загрузите свою рекламу и сделайте свой бренд заметным.','',CFG.billImg,'Размещение рекламы на билбордах: охватные локации и высокий трафик','Билборды')}
     <section class="blk"><div class="wrap" id="mapbox"></div></section>
     <section class="blk"><div class="wrap">
       <div class="sh"><div><h2>Доступные билборды</h2><p>Выберите подходящую локацию для вашей рекламы</p></div></div>
-      <div class="grid">${BB.map(b=>newsCard({tag:b.free?'Свободен':'Занят',title:b.title,text:b.text,img:b.img}).replace('class="tag"',`class="tag ${b.free?'free':'busy'}"`)).join('')}</div>
+      <div class="grid">${BB.map(bbCard).join('')}</div>
       <p class="prose" style="margin-top:34px">Не упускайте возможность — займите свой билборд уже сегодня.</p>
     </div></section>`,
 
   /* ВКЛАДКА 3 — КОНТАКТЫ: адрес, телефоны, почта + карточки команды (TEAM) */
   contacts: () => `
-    ${head('Напишите нам','Расскажите, что нужно сделать, и мы ответим в течение двух рабочих дней.')}
+    ${head('Напишите нам','Расскажите, что нужно сделать, и мы ответим в течение двух рабочих дней.','',CFG.contactImg,'Связь с редакцией','Контакты')}
     <section class="blk"><div class="wrap">
       <div class="sh"><h2>Как с нами связаться</h2></div>
-      <p class="prose">Little Seoul, 8144\n370-1077 — Molly Mercantile\n872-8988 — Ify Jelani\nПочта: <a href="mailto:${CFG.email}" style="border-bottom:1px solid var(--red)">${CFG.email}</a></p>
+      <div class="grid">
+        <div class="panel pr"><span class="cap">Адрес</span><h3>Little Seoul, 8144</h3></div>
+        <div class="panel pr"><span class="cap">Телефоны</span><p>370-1077 — Molly Mercantile<br>872-8988 — Ify Jelani</p></div>
+        <div class="panel pr"><span class="cap">Почта</span><p><a href="mailto:${CFG.email}" style="border-bottom:1px solid var(--red)">${CFG.email}</a></p></div>
+      </div>
     </div></section>
     <section class="blk" style="padding-top:0"><div class="wrap">
       <div class="sh"><div><h2>Наша команда</h2><p>Люди, которые делают Weazel News каждый день</p></div></div>
-      <div class="grid g2">${TEAM.map(p=>`<article class="panel card team">
+      <div class="grid g2">${TEAM.map(p=>`<article class="panel pr card team">
         <div class="ava">${p.img?img(p.img,p.name):p.name.split(' ').map(w=>w[0]).join('')}</div>
         <h3>${p.name}</h3><div class="tag">${p.role}</div><p>${p.text}</p>
         <div class="ph"><a href="tel:${p.phone.replace(/[^\d+]/g,'')}">☎ ${p.phone}</a><button data-copy="${p.phone}" aria-label="Скопировать номер">Копировать</button></div>
@@ -334,10 +346,10 @@ const VIEWS = {
 
   /* ВКЛАДКА 4 — ЦЕНЫ И УСЛУГИ: онлайн-запись с картинкой + три колонки цен (PRICES) */
   prices: () => `
-    ${head('Онлайн-запись','Выберите удобное время и забронируйте нужную услугу в несколько кликов.',`<a class="btn" href="${BOOKING_URL}" target="_blank" rel="noopener">Забронировать ↗</a>`, CFG.priceImg)}
+    ${head('Онлайн-запись','Выберите удобное время и забронируйте нужную услугу в несколько кликов.',`<a class="btn" href="${BOOKING_URL}" target="_blank" rel="noopener">Забронировать ↗</a>`, CFG.priceImg,'Цены и услуги','Онлайн-запись')}
     <section class="blk"><div class="wrap">
       <div class="sh"><div><h2>Цены и услуги</h2><p>За услугами редакции обращайтесь по телефонам или посетите нас лично</p></div></div>
-      <div class="grid">${PRICES.map(([t,x])=>`<div class="panel"><h3>${t}</h3><ul class="pl">${ml(x).map(l=>{
+      <div class="grid">${PRICES.map(([t,x])=>`<div class="panel pr"><h3>${t}</h3><ul class="pl">${ml(x).map(l=>{
         const i=l.lastIndexOf(' — ');return i<0?`<li class="n">${l}</li>`:`<li><span>${l.slice(0,i)}</span><b>${l.slice(i+3)}</b></li>`}).join('')}</ul></div>`).join('')}</div>
     </div></section>`,
 };
