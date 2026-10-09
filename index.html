@@ -23,7 +23,7 @@ main{flex:1}
 .top{background:#0b0b0e;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
 .top .wrap{display:flex;align-items:center;gap:1.6rem;height:4.2rem}
 .logo{display:flex;align-items:center;gap:.5rem;font:italic 800 1.9rem/1 'Onest',sans-serif;letter-spacing:-.04em;text-transform:uppercase}
-.logo b{background:var(--red);padding:.2rem .6rem .2rem .45rem;font-size:1.55rem;transform:skewX(-8deg);display:inline-block;border-radius:4px;color:#fff;text-shadow:0 0 .5rem #ffffffaa,0 0 1rem #ff2a33;box-shadow:0 0 .8rem #e5222a,0 0 2rem #e5222a88;animation:neon 2.8s ease-in-out infinite alternate}
+.logo b{background:var(--red);padding:.2rem .6rem .2rem .45rem;font-size:1.55rem;transform:skewX(-8deg);display:inline-block;border-radius:4px;color:#fff;text-shadow:0 0 .5rem #ffffffaa,0 0 1rem #ff2a33;box-shadow:0 0 .8rem #e5222a,0 0 2rem #e5222a88;animation:neon 1.4s ease-in-out infinite alternate}
 /* СВЕЧЕНИЕ «NEWS»: сила — значения в box-shadow; скорость — секунды в animation (2.8s) у .logo b */
 @keyframes neon{0%{box-shadow:0 0 .6rem #e5222acc,0 0 1.4rem #e5222a66}100%{box-shadow:0 0 1rem #ff2a33,0 0 2.6rem #e5222a99,0 0 4rem #e5222a44}}
 .slogan{font-size:.7rem;line-height:1.4;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;font-weight:500}
@@ -211,7 +211,7 @@ const CFG = {
      Эфира нет  → оставьте пустые кавычки: liveUrl: '' — кнопка станет серой с надписью из liveOffText,
                   а при нажатии появится сообщение liveOffMsg. */
   liveUrl: '',
-  liveOnText: 'Прямой эфир',                                            // надпись на кнопке, когда эфир идёт
+  liveOnText: 'Прямой эфир',                                             // надпись на кнопке, когда эфир идёт
   liveOffText: 'Эфира нет',                                              // надпись на кнопке, когда эфира нет
   liveOffMsg: 'Прямого эфира сейчас нет. Загляните позже — мы сообщим о начале!',   // сообщение при нажатии
 
