@@ -6,14 +6,14 @@
 <title>Weazel News</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
-<!-- Всё редактируемое (тексты, новости, цены, билборды, команда, картинки) — блок «НАСТРОЙКИ И КОНТЕНТ» в <script>. Цвета — :root в <style>. Файл должен называться index.html. -->
+<!-- Всё редактируемое — блок «НАСТРОЙКИ И КОНТЕНТ» в <script>. Ссылка на таблицу — CFG.sheetUrl. Цвета — :root в <style>. Файл должен называться index.html. -->
 <style>
 :root{--bg:#0a0a0d;--panel:#121216;--panel2:#1a1a20;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--green:#3fb765;--r:14px;--r2:10px;--pad:clamp(16px,3.4vw,96px);--fs-s:.875rem;--fs-l:1.125rem;color-scheme:dark}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;font-size:clamp(14px,calc(10px + .5vw),30px);-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--text);font:1rem/1.6 'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden;display:flex;flex-direction:column}
 body::before{content:"";position:fixed;inset:0;z-index:-1;background:url(https://i.imgur.com/VL677mc.jpg) center/cover;opacity:.06}
-img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 [hidden]{display:none!important}[id]{scroll-margin-top:5rem}
 :focus-visible{outline:2px solid var(--red2);outline-offset:3px}
 .wrap{width:100%;padding:0 var(--pad)}.cap{font-size:var(--fs-s);color:var(--muted)}
@@ -43,7 +43,7 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 
 /* КНОПКИ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.9rem;padding:.6rem 1.4rem;background:var(--red);border:1px solid var(--red);border-radius:var(--r2);font-weight:600;transition:background .15s,border-color .15s}
-.btn:hover{background:var(--red2);border-color:var(--red2)}
+.btn:hover{background:var(--red2);border-color:var(--red2)}.btn:disabled{opacity:.6;cursor:default}
 .btn.ghost{background:transparent;border-color:#3a3a44}.btn.ghost:hover{background:#ffffff0d;border-color:#5a5a66}
 .btn.sm{min-height:2.4rem;padding:.35rem 1rem;font-size:.92rem}
 .acts{display:flex;gap:.7rem;flex-wrap:wrap}
@@ -137,6 +137,24 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .pr b{white-space:nowrap;font-weight:700}.pr small{font-weight:500;color:var(--muted);font-size:.85em}
 .pnote{color:var(--muted);font-size:var(--fs-s);padding:.6rem 0}
 
+/* ФОРМА ЗАПИСИ */
+.book{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(1.2rem,3vw,3rem);margin-top:clamp(1.5rem,3vw,3rem);padding:clamp(1.2rem,2.4vw,2rem);background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
+.book h2{font-size:clamp(1.4rem,1.1rem + .9vw,2rem);font-weight:700;letter-spacing:-.025em;line-height:1.2}.book .intro p{color:var(--muted);margin-top:.6rem;max-width:40ch}
+.form{display:flex;flex-direction:column;gap:1.2rem}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fld{display:flex;flex-direction:column;gap:.4rem;min-width:0;border:0;padding:0}
+.fld>label,.fld>legend{font-size:var(--fs-s);font-weight:600;padding:0}
+.inp{width:100%;min-height:2.9rem;padding:.55rem .9rem;background:var(--bg);border:1px solid var(--line);border-radius:var(--r2)}
+textarea.inp{min-height:6.5rem;resize:vertical}.inp:focus{border-color:var(--red2);outline:0}
+.sg{font-size:var(--fs-s);color:var(--muted);margin:.6rem 0 .4rem}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.5rem}
+.opt{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg);cursor:pointer;font-size:.95rem;line-height:1.35}
+.opt:hover{border-color:#44444f}.opt:has(input:checked){border-color:var(--red2);background:#d0141c14}
+.opt input{accent-color:var(--red2);width:1.1rem;height:1.1rem;flex:none}.opt small{margin-left:auto;color:var(--muted);white-space:nowrap;padding-left:.4rem}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.fmsg{font-size:.92rem;color:var(--muted)}.fmsg.err{color:#ff7b80}
+.done{display:flex;flex-direction:column;gap:.8rem;align-items:flex-start;padding:1.4rem;border:1px solid #3fb76566;background:#3fb76514;border-radius:var(--r)}.done h3{font-size:1.2rem}.done p{color:var(--muted)}
+
 footer{border-top:1px solid var(--line);margin-top:1rem;background:#0b0b0e}
 footer .wrap{display:flex;align-items:center;gap:1.4rem;min-height:5rem;flex-wrap:wrap;padding-top:1rem;padding-bottom:1rem}
 footer .logo{font-size:1.3rem}footer .logo b{font-size:1.05rem}footer small{font-size:.8rem;color:var(--muted)}
@@ -148,11 +166,11 @@ footer nav{height:auto;gap:1.2rem}footer nav a{font-size:.875rem;border:0;margin
  .top .wrap{flex-wrap:wrap;height:auto;padding-top:.7rem;padding-bottom:.4rem;gap:.6rem 1rem}
  nav{order:3;width:100%;margin:0;overflow-x:auto;gap:1.5rem;height:2.7rem}
  .live{margin-left:auto;padding:.5rem 1rem}
- .hero,.pghead .wrap,.bbgrid{grid-template-columns:1fr}
+ .hero,.pghead .wrap,.bbgrid,.book{grid-template-columns:1fr}
  .hero-r{min-height:18rem}
  .bbside{position:static;order:-1}
 }
-@media(max-width:640px){.tp{grid-template-columns:4.5rem 1fr}.av{width:4.5rem;height:4.5rem}.sh{flex-direction:column;align-items:flex-start}.search{max-width:none}}
+@media(max-width:640px){.tp{grid-template-columns:4.5rem 1fr}.av{width:4.5rem;height:4.5rem}.sh{flex-direction:column;align-items:flex-start}.search{max-width:none}.fgrid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -183,6 +201,11 @@ const CFG = {
   liveUrl: '',                 // ссылка на прямой эфир; пусто = кнопка ведёт на «Контакты»
   heroImg: IMG('i2kWNP9'),     // картинка на главной
   mapImg: IMG('RWH8fDt'),      // карта города для билбордов
+
+  /* >>> СЮДА ВСТАВЬТЕ ССЫЛКУ ДЛЯ ТАБЛИЦЫ <<<
+     Это ссылка веб-приложения Apps Script (заканчивается на /exec), а не обычная ссылка на таблицу.
+     Как получить: Таблица → Расширения → Apps Script → вставить скрипт → Развернуть → Веб-приложение (доступ: все). */
+  sheetUrl: '',
 };
 /* ТОЧКИ НА КАРТЕ: номер: [слева %, сверху %]. Режим разметки: открыть сайт с ?calibrate в конце адреса */
 const BB_POS = { 1:[38.4,29.1], 2:[52.0,41.7], 3:[14.5,33.2] };
@@ -205,7 +228,8 @@ const BB = [
   [15,P,3045,0,D],[16,P,2048,0,D],[17,P,3035,1,D],[18,P,3036,0,D],[19,P,3030,1,D],
 ].map(([n,s,c,f,t]) => ({ n, s, c, title:`Билборд №${n} — ${s} [${c}]`, free:!!f, text:t, img:IMG('jXQsUD3') }));
 const FREE = BB.filter(b => b.free).length;
-/* ЦЕНЫ: ['Название', 'Услуга — цена\nУслуга — цена']. Строка без « — » выводится как серое примечание */
+/* ЦЕНЫ: ['Название', 'Услуга — цена\nУслуга — цена']. Строка без « — » выводится как серое примечание.
+   Эти же услуги автоматически попадают в форму записи. */
 const PRICES = [
   ['Печать и реклама', 'Визитки (1 шт.) — 25$\nБуклеты (10 шт.) — 400$\nЖурнал (1 шт.) — от 1000$\nМеню (20 шт.) — 500$\nРазмещение рекламы в газете — 800$\nРазмещение рекламы на портале штата — 1500$'],
   ['Фото и видео', 'Фотосессия одиночная (до 10 фото) — 1500$\nФотосессия парная (до 10 фото) — 2000$\nОбработка одного фото — 150$\nРекламные ролики/клипы (до 3 мин) — от 3500$\nМонтаж видео — от 1500$'],
@@ -218,7 +242,6 @@ const TEAM = [
   { name:'Ify Jelani', role:'Репортёр и фотограф', phone:'872-8988', img:'',
     text:'Ведёт съёмки, репортажи и интервью. Принимает заказы на фотосессии и видео.' },
 ];
-const BOOKING_URL = 'https://forms.gle/BiPo92EtNTtLGJX96';   // ссылка кнопки «Записаться онлайн»
 /* ================================================================================ */
 
 /* ВКЛАДКИ: ['адрес', 'название в меню']. Новая вкладка: добавьте сюда и в VIEWS ниже */
@@ -235,6 +258,25 @@ const pghead = (t, lead, acts='', aside='') => `<section class="pghead"><div cla
 const phones = cls => TEAM.map(p => `<a class="btn ${cls} sm" href="${tel(p.phone)}">${p.name.split(' ')[0]}: ${p.phone}</a>`).join('');
 const priceRow = l => { const i = l.lastIndexOf(' — ');
   return i < 0 ? `<p class="pnote">${l}</p>` : `<div class="pr"><span>${l.slice(0,i)}</span><b>${l.slice(i+3).replace(/^от\s+/,'<small>от</small> ')}</b></div>` };
+
+// Форма записи: услуги берутся из PRICES, билборды — свободные из BB
+const bookingForm = () => `<form class="form" id="bf" novalidate>
+  <div class="fgrid">
+    <div class="fld"><label for="f-name">Ваше имя</label><input class="inp" id="f-name" name="name" required autocomplete="name" placeholder="Имя и фамилия"></div>
+    <div class="fld"><label for="f-contact">Ваш контакт</label><input class="inp" id="f-contact" name="contact" required placeholder="Телефон, Discord или почта"></div>
+  </div>
+  <fieldset class="fld"><legend>Услуги</legend>
+    ${PRICES.map(([t,x])=>`<div class="sg">${t}</div><div class="opts">${ml(x).filter(l=>l.includes(' — ')).map(l=>{const i=l.lastIndexOf(' — '),n=l.slice(0,i),p=l.slice(i+3);
+      return `<label class="opt"><input type="checkbox" name="srv" value="${n} (${p})"><span>${n}</span><small>${p}</small></label>`}).join('')}</div>`).join('')}
+  </fieldset>
+  <div class="fgrid">
+    <div class="fld"><label for="f-bb">Билборд</label><select class="inp" id="f-bb" name="bb"><option value="">Билборд не нужен</option>${BB.filter(b=>b.free).map(b=>`<option value="${b.title}">№${b.n} — ${b.s} [${b.c}]</option>`).join('')}</select></div>
+    <div class="fld"><label for="f-time">Желаемые дата и время</label><input class="inp" id="f-time" name="time" placeholder="Например: завтра после 18:00"></div>
+  </div>
+  <div class="fld"><label for="f-comment">Комментарий</label><textarea class="inp" id="f-comment" name="comment" placeholder="Расскажите, что нужно сделать, и добавьте детали"></textarea></div>
+  <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <div class="acts" style="align-items:center"><button class="btn" type="submit">Отправить заявку</button><span class="fmsg" id="fmsg" role="status"></span></div>
+</form>`;
 
 const VIEWS = {
   home: () => `
@@ -259,7 +301,7 @@ const VIEWS = {
       `<div class="facts"><div><b>${BB.length}</b><span>Всего</span></div><div><b class="g">${FREE}</b><span>Свободно</span></div><div><b class="r">${BB.length-FREE}</b><span>Занято</span></div></div>`)}
     <section class="blk"><div class="wrap">
       <div id="bbapp"></div>
-      <div class="help"><div><h3>Не упускайте возможность</h3><p>Займите свой билборд уже сегодня.</p></div><a class="btn" href="#/contacts">Заказать размещение</a></div>
+      <div class="help"><div><h3>Не упускайте возможность</h3><p>Займите свой билборд уже сегодня.</p></div><a class="btn" href="#/prices" data-scroll-after="booking">Оставить заявку</a></div>
     </div></section>`,
 
   contacts: () => `
@@ -280,12 +322,16 @@ const VIEWS = {
     </div></section>`,
 
   prices: () => `
-    ${pghead('Цены и услуги','Выберите услугу и забронируйте время онлайн. По остальным вопросам звоните или приходите лично.',
-      `<a class="btn" href="${BOOKING_URL}" target="_blank" rel="noopener">Записаться онлайн ↗</a><a class="btn ghost" href="#/contacts">Контакты</a>`)}
+    ${pghead('Цены и услуги','Выберите услуги и оставьте заявку прямо здесь — мы свяжемся с вами. По остальным вопросам звоните или приходите лично.',
+      `<a class="btn" href="#booking" data-scroll="booking">Записаться</a><a class="btn ghost" href="#/contacts">Контакты</a>`)}
     <section class="blk"><div class="wrap">
       <div class="chips" role="group" aria-label="Категории">${[['all','Все услуги'],...PRICES.map(([t],i)=>[String(i),t])].map(([k,t])=>`<button data-pf="${k}" aria-pressed="${k==='all'}">${t}</button>`).join('')}</div>
       <div class="pgrid" id="pgrid">${PRICES.map(([t,x],i)=>{const n=ml(x).filter(l=>l.includes(' — ')).length;
         return `<section class="pc" data-i="${i}"><header><h2>${t}</h2><span class="cap">${n} ${plural(n,'услуга','услуги','услуг')}</span></header>${ml(x).map(priceRow).join('')}</section>`}).join('')}</div>
+      <section class="book" id="booking">
+        <div class="intro"><h2>Онлайн-запись</h2><p>Отметьте нужные услуги, выберите билборд при необходимости и напишите удобное время. Мы свяжемся с вами по указанному контакту.</p></div>
+        <div id="bform">${bookingForm()}</div>
+      </section>
       <div class="help"><div><h3>Нужна услуга, которой нет в списке?</h3><p>Позвоните или приходите лично: ${CFG.address}.</p></div><div class="acts">${phones('ghost')}</div></div>
     </div></section>`,
 };
@@ -307,7 +353,7 @@ function initBillboards(){
   const mark = () => { box.querySelectorAll('.bbrow').forEach(r=>r.setAttribute('aria-pressed',String(+r.dataset.n===sel)));
     box.querySelectorAll('.pin').forEach(p=>p.classList.toggle('on',+p.dataset.n===sel)) };
   const drawInfo = () => { const a = BB.find(b=>b.n===sel);
-    $('#bbi').innerHTML = a ? `<div class="info"><div class="im">${img(a.img,a.title)}</div><div class="ib"><span class="st ${a.free?'':'busy'}">${a.free?'Свободен':'Занят'}</span><h3>${a.title}</h3><p>${a.text}</p>${a.free?'<a class="btn sm" href="#/contacts">Узнать условия</a>':'<p class="cap">Этот билборд занят — выберите свободный из списка.</p>'}</div></div>`
+    $('#bbi').innerHTML = a ? `<div class="info"><div class="im">${img(a.img,a.title)}</div><div class="ib"><span class="st ${a.free?'':'busy'}">${a.free?'Свободен':'Занят'}</span><h3>${a.title}</h3><p>${a.text}</p>${a.free?'<a class="btn sm" href="#/prices" data-scroll-after="booking">Оставить заявку</a>':'<p class="cap">Этот билборд занят — выберите свободный из списка.</p>'}</div></div>`
       : '<div class="info hint">Выберите билборд в списке или на карте — здесь появятся адрес, статус и описание.</div>' };
   const drawPins = () => { $('#pins').innerHTML = list().filter(b=>pos[b.n]).map(b=>`<button class="pin ${b.free?'free':'busy'}" style="left:${pos[b.n][0]}%;top:${pos[b.n][1]}%" data-n="${b.n}" aria-label="${b.title}">${b.n}</button>`).join('') };
   const drawList = () => { const l = list(); if(sel && !l.some(b=>b.n===sel)) sel=null;
@@ -337,6 +383,7 @@ function initBillboards(){
 }
 
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2800)}
+let after = '';   // куда прокрутить после перехода на другую вкладку
 function route(){
   const id = (location.hash.match(/^#\/(\w+)/)||[])[1];
   const cur = PAGES.some(p=>p[0]===id) ? id : 'home';
@@ -345,13 +392,33 @@ function route(){
   document.title = (cur==='home' ? '' : PAGES.find(p=>p[0]===cur)[1]+' — ') + 'Weazel News';
   if(cur==='billboards') initBillboards();
   window.scrollTo(0,0);
+  if(after){ const t=after; after=''; setTimeout(()=>document.getElementById(t)?.scrollIntoView(),0) }
 }
 document.addEventListener('click',e=>{
   const s=e.target.closest('[data-scroll]'); if(s){e.preventDefault();document.getElementById(s.dataset.scroll)?.scrollIntoView()}
+  const a=e.target.closest('[data-scroll-after]'); if(a) after=a.dataset.scrollAfter;
   const c=e.target.closest('[data-copy]'); if(c) navigator.clipboard?.writeText(c.dataset.copy).then(()=>toast('Скопировано: '+c.dataset.copy),()=>toast(c.dataset.copy));
   const f=e.target.closest('[data-pf]'); if(f){ const k=f.dataset.pf, g=$('#pgrid');
     document.querySelectorAll('[data-pf]').forEach(b=>b.setAttribute('aria-pressed',String(b===f)));
     g.classList.toggle('one',k!=='all'); g.querySelectorAll('.pc').forEach(c=>c.hidden = k!=='all' && c.dataset.i!==k) }
+  if(e.target.closest('[data-again]')) $('#bform').innerHTML = bookingForm();
+});
+
+/* Отправка заявки в Google Таблицу через Apps Script (CFG.sheetUrl) */
+document.addEventListener('submit', async e => {
+  const f = e.target.closest?.('#bf'); if(!f) return; e.preventDefault();
+  const fd = new FormData(f); if(fd.get('website')) return;
+  const d = { name:fd.get('name').trim(), contact:fd.get('contact').trim(), services:fd.getAll('srv').join('; '),
+    billboard:fd.get('bb'), time:fd.get('time').trim(), comment:fd.get('comment').trim() };
+  const m = $('#fmsg'), b = f.querySelector('[type=submit]'), err = t => { m.textContent=t; m.className='fmsg err' };
+  if(!d.name || !d.contact) return err('Укажите имя и контакт, чтобы мы могли с вами связаться.');
+  if(!d.services && !d.billboard && !d.comment) return err('Выберите услугу или билборд либо опишите задачу в комментарии.');
+  if(!CFG.sheetUrl) return err('Форма пока не подключена к таблице: вставьте ссылку в CFG.sheetUrl.');
+  b.disabled = true; b.textContent = 'Отправляем…'; m.textContent = ''; m.className = 'fmsg';
+  try{
+    await fetch(CFG.sheetUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(d) });
+    $('#bform').innerHTML = `<div class="done"><h3>Заявка отправлена</h3><p>Мы свяжемся с вами по указанному контакту: ${d.contact.replace(/[<>&]/g,'')}.</p><button class="btn ghost sm" data-again>Отправить ещё одну</button></div>`;
+  }catch(_){ err('Не удалось отправить. Проверьте интернет и попробуйте ещё раз.'); b.disabled=false; b.textContent='Отправить заявку' }
 });
 
 $('#nav').innerHTML = PAGES.map(([id,t])=>`<a href="#/${id}" data-p="${id}">${t}</a>`).join('');
