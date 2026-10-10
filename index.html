@@ -106,16 +106,19 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .bbrow b{display:block;font-weight:600}.bbrow small{color:var(--muted);font-size:var(--fs-s)}
 .st{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;padding:.25rem .75rem;border-radius:999px;background:#3fb76526;color:#6fd68c;white-space:nowrap;width:fit-content}
 .st::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:currentColor}.st.busy{background:#e5222a26;color:#ff7b80}
-.bbside{position:sticky;top:5.4rem;display:flex;flex-direction:column;gap:1rem}
-.map{position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#16161b;user-select:none;scroll-margin-top:5rem}
-.map>img{width:100%;height:auto}.mapempty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted);text-align:center;padding:1rem}
+.bbside{position:sticky;top:5.4rem;display:flex;flex-direction:column;gap:.8rem}
+.map{position:relative;border:1px solid var(--line);border-radius:var(--r);background:#16161b;user-select:none;scroll-margin-top:5rem}
+.map>img{width:100%;height:auto;border-radius:calc(var(--r) - 1px)}.mapempty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted);text-align:center;padding:1rem}
 .pins{position:absolute;inset:0;pointer-events:none}
-.pin{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);width:max(1.9rem,26px);height:max(1.9rem,26px);border-radius:50%;border:2px solid #fff;color:#fff;font-size:.75rem;font-weight:700;display:grid;place-items:center;padding:0;box-shadow:0 3px 10px #000a}
+.pin{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);width:max(1.9rem,26px);height:max(1.9rem,26px);border-radius:50%;border:2px solid #fff;color:#fff;font-size:.75rem;font-weight:700;display:grid;place-items:center;padding:0;box-shadow:0 3px 10px #000a;transition:transform .15s,box-shadow .15s}
 .pin.free{background:#2f9e4a}.pin.busy{background:#c0392b}.pin.on{transform:translate(-50%,-50%) scale(1.35);z-index:3;box-shadow:0 0 0 4px #fff6}
-.info{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.info.hint{padding:1.2rem;color:var(--muted);border-style:dashed;text-align:center}
-.info .im{aspect-ratio:16/7;background:var(--panel2)}.info .im img{width:100%;height:100%;object-fit:cover}
-.ib{padding:1.2rem;display:flex;flex-direction:column;gap:.7rem;align-items:flex-start}.ib h3{font-size:1.2rem;font-weight:600;line-height:1.35}.ib p{color:var(--muted)}
+.hintcap{text-align:center}
+
+/* ВСПЛЫВАЮЩАЯ КАРТОЧКА У ТОЧКИ */
+.tip{position:absolute;z-index:6;width:17rem;max-width:100%;display:flex;flex-direction:column;gap:.55rem;align-items:flex-start;padding:1rem;background:#16161bf5;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid #3a3a44;border-radius:var(--r);box-shadow:0 12px 36px #000b;opacity:0;visibility:hidden;transform:translateY(6px) scale(.97);transition:opacity .16s,transform .16s,visibility .16s;pointer-events:none}
+.tip.show{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+.tip h3{font-size:1rem;font-weight:600;line-height:1.35}.tip p{color:var(--muted);font-size:.92rem;line-height:1.5}
+
 .empty{padding:2rem 1rem;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r2)}
 .cal{border:1px dashed var(--red);border-radius:var(--r2);padding:.9rem;font-size:.9rem;display:flex;flex-direction:column;gap:.6rem;background:#d0141c14}
 .cal select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.4rem}
@@ -234,7 +237,7 @@ const NEWS = [
   { tag:'Помощник Губернатора', title:'Новое расследование Weazel News', img:IMG('R6CoRVc'),
     text:'Офицеры в то же время начали ограничивать действия жителей Los-Santos, остающихся на месте происшествия — неоднократно предлагая тем забрать свои транспортные средства и покинуть территорию.' },
 ];
-/* БИЛБОРДЫ: [номер, улица, код, статус (1 — свободен, 0 — занят), описание]. D и P — сокращения */
+/* БИЛБОРДЫ: [номер, улица, код, статус (1 — свободен, 0 — занят), описание (можно не указывать)]. D и P — сокращения */
 const D = 'Отличная видимость с основной магистрали города.', P = 'Шоссе Дель-Перро';
 const BB = [
   [1,'Синнер-стрит, Мишн-Роу',8177,0,'Высокий пешеходный и автомобильный трафик.'],
@@ -242,7 +245,7 @@ const BB = [
   [4,'Попьюлар-стрит, Ла-Меса',8182,1,],[5,'шоссе Элизиан-Филдз, Мурьета-Хайтс',9248,1,],[6,'Шоссе Ла-Пуэрта, Строберри',9035,1,],[7,'Литл-Бигхорн-авеню, Ранчо',9061,1,],[8,'Шоссе Олимпик, Строберри',9052,1,],[9,'Литл-Бигхорн-авеню, Ранчо',9187,1,],
   [10,'Бульвар Роя Левенштейна, Ранчо',9162,0,],[11,'Истборн-вэй, Бертон',7205,1,],[12,'Бульвар Лас-Лагунас, Западный Вайнвуд',7079,0,],[13,'Дэвис-авеню, Ла-Пуэрта',9000,0,],[14,'Шоссе Лос-Сантоса, Пустыня Гранд-Сенора',3036,1,],
   [15,'Шоссе 68, Пустыня Гранд-Сенора',3045,0,],[16,'Ист-Джошуа-роуд, Грейпсид',2048,0,],[17,'Джошуа-роуд, Сэнди-Шорс',3035,1,],[18,'Джошуа-роуд, Пустыня Гранд-Сенора',3036,0,],[19,'Джошуа-роуд, Пустыня Гранд-Сенора',3030,1,],
-].map(([n,s,c,f,t]) => ({ n, s, c, title:`Билборд №${n} — ${s} [${c}]`, free:!!f, text:t, img:IMG('jXQsUD3') }));
+].map(([n,s,c,f,t]) => ({ n, s, c, title:`Билборд №${n} — ${s} [${c}]`, free:!!f, text:t || '' }));
 const FREE = BB.filter(b => b.free).length;
 /* ЦЕНЫ: ['Название', 'Услуга — цена\nУслуга — цена']. Строка без « — » выводится как серое примечание.
    Эти же услуги автоматически попадают в форму записи. */
@@ -353,35 +356,65 @@ const VIEWS = {
 };
 
 /* ---- ЛОГИКА ---- */
-/* Билборды: фильтр, поиск, список + карта с точками, карточка выбранного. ?calibrate — режим разметки точек */
+/* Билборды: фильтр, поиск, список + карта с точками. Информация о билборде всплывает рядом с точкой при наведении (на телефоне — при нажатии).
+   ?calibrate — режим разметки точек */
 function initBillboards(){
   const box = $('#bbapp'); if(!box) return;
   const cal = /[?&]calibrate/.test(location.search), narrow = () => matchMedia('(max-width:960px)').matches;
-  let filter='all', q='', sel=null, cur='', pos={...BB_POS};
+  let filter='all', q='', sel=null, hov=null, hideT=0, cur='', pos={...BB_POS};
   box.innerHTML = `
     <div class="tools"><div class="seg" role="group" aria-label="Статус">${[['all','Все',BB.length],['free','Свободные',FREE],['busy','Занятые',BB.length-FREE]].map(([k,t,n])=>`<button data-f="${k}" aria-pressed="${k==='all'}">${t}<span>${n}</span></button>`).join('')}</div>
       <input class="search" id="bbq" type="search" placeholder="Поиск по улице, номеру или коду" aria-label="Поиск билборда"></div>
     <div class="bbgrid"><div class="bblist" id="bbl"></div>
       <aside class="bbside">${cal?'<div class="cal" id="cal"></div>':''}
-        <div class="map" id="map">${CFG.mapImg?img(CFG.mapImg,'Карта билбордов'):'<div class="mapempty">Укажите ссылку на карту в CFG.mapImg</div>'}<div class="pins" id="pins"></div></div>
-        <div id="bbi"></div></aside></div>`;
+        <div class="map" id="map">${CFG.mapImg?img(CFG.mapImg,'Карта билбордов'):'<div class="mapempty">Укажите ссылку на карту в CFG.mapImg</div>'}<div class="pins" id="pins"></div><div class="tip" id="tip" role="tooltip"></div></div>
+        <p class="cap hintcap">Наведите на точку на карте или выберите билборд в списке — рядом появится информация.</p></aside></div>`;
   const list = () => BB.filter(b => (filter==='all' || (filter==='free')===b.free) && `${b.n} ${b.s} ${b.c}`.toLowerCase().includes(q));
-  const mark = () => { box.querySelectorAll('.bbrow').forEach(r=>r.setAttribute('aria-pressed',String(+r.dataset.n===sel)));
-    box.querySelectorAll('.pin').forEach(p=>p.classList.toggle('on',+p.dataset.n===sel)) };
-  const drawInfo = () => { const a = BB.find(b=>b.n===sel);
-    $('#bbi').innerHTML = a ? `<div class="info"><div class="im">${img(a.img,a.title)}</div><div class="ib"><span class="st ${a.free?'':'busy'}">${a.free?'Свободен':'Занят'}</span><h3>${a.title}</h3><p>${a.text}</p>${a.free?'<a class="btn sm" href="#/prices" data-scroll-after="booking">Оставить заявку</a>':'<p class="cap">Этот билборд занят — выберите свободный из списка.</p>'}</div></div>`
-      : '<div class="info hint">Выберите билборд в списке или на карте — здесь появятся адрес, статус и описание.</div>' };
+
+  /* Подсветка строки и точки */
+  const mark = () => { const on = hov ?? sel;
+    box.querySelectorAll('.bbrow').forEach(r=>r.setAttribute('aria-pressed',String(+r.dataset.n===sel)));
+    box.querySelectorAll('.pin').forEach(p=>p.classList.toggle('on',+p.dataset.n===on)) };
+
+  /* Всплывающая карточка рядом с точкой */
+  const place = n => {
+    const t = $('#tip'), m = $('#map'), a = BB.find(b=>b.n===n); if(!t || !m || !a) return;
+    t.innerHTML = `<span class="st ${a.free?'':'busy'}">${a.free?'Свободен':'Занят'}</span><h3>${a.title}</h3>${a.text?`<p>${a.text}</p>`:''}${a.free?'<a class="btn sm" href="#/prices" data-scroll-after="booking">Оставить заявку</a>':''}${pos[n]?'':'<p class="cap">Точка на карте пока не размечена.</p>'}`;
+    t.classList.add('show');
+    const W = m.clientWidth, H = m.clientHeight, w = t.offsetWidth, h = t.offsetHeight, gap = 20, clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
+    let left, top;
+    if(!pos[n]){ left = (W-w)/2; top = (H-h)/2 }
+    else{
+      const x = pos[n][0]/100*W, y = pos[n][1]/100*H;
+      if(x+gap+w <= W){ left = x+gap; top = clamp(y-h/2, 0, Math.max(0,H-h)) }
+      else if(x-gap-w >= 0){ left = x-gap-w; top = clamp(y-h/2, 0, Math.max(0,H-h)) }
+      else{ left = clamp(x-w/2, 0, Math.max(0,W-w)); top = (y+gap+h <= H) ? y+gap : (y-gap-h >= 0 ? y-gap-h : y+gap) }
+    }
+    t.style.left = Math.round(left)+'px'; t.style.top = Math.round(top)+'px';
+  };
+  const refresh = () => { const n = hov ?? sel; if(n!=null) place(n); else $('#tip')?.classList.remove('show'); mark() };
+  const scheduleHide = () => { clearTimeout(hideT); hideT = setTimeout(()=>{ hov=null; refresh() }, 180) };
+
   const drawPins = () => { $('#pins').innerHTML = list().filter(b=>pos[b.n]).map(b=>`<button class="pin ${b.free?'free':'busy'}" style="left:${pos[b.n][0]}%;top:${pos[b.n][1]}%" data-n="${b.n}" aria-label="${b.title}">${b.n}</button>`).join('') };
-  const drawList = () => { const l = list(); if(sel && !l.some(b=>b.n===sel)) sel=null;
+  const drawList = () => { const l = list(); if(sel && !l.some(b=>b.n===sel)) sel=null; hov=null;
     $('#bbl').innerHTML = l.length ? l.map(b=>`<button class="bbrow" data-n="${b.n}"><span class="bbn">${b.n}</span><span><b>${b.s}</b><small>Код ${b.c}</small></span><span class="st ${b.free?'':'busy'}">${b.free?'Свободен':'Занят'}</span></button>`).join('') : '<div class="empty">Ничего не найдено. Измените фильтр или запрос.</div>';
-    drawPins(); mark(); drawInfo() };
-  const select = (n, src) => { sel=n; mark(); drawInfo();
+    drawPins(); refresh() };
+  const select = (n, src) => { sel = (sel===n && src==='pin') ? null : n; hov=null; refresh();
     if(src==='row' && narrow()) $('#map').scrollIntoView({behavior:'smooth',block:'start'});
     if(src==='pin' && !narrow()) box.querySelector(`.bbrow[data-n="${n}"]`)?.scrollIntoView({block:'nearest',behavior:'smooth'}) };
+
   box.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;box.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawList()});
   $('#bbq').oninput = e => { q=e.target.value.trim().toLowerCase().replace(/^№/,''); drawList() };
   $('#bbl').onclick = e => { const r=e.target.closest('.bbrow'); if(r) select(+r.dataset.n,'row') };
   $('#pins').onclick = e => { const p=e.target.closest('.pin'); if(p){ e.stopPropagation(); select(+p.dataset.n,'pin') } };
+  /* Наведение на точку */
+  $('#pins').addEventListener('mouseover', e => { const p=e.target.closest('.pin'); if(p){ clearTimeout(hideT); hov=+p.dataset.n; refresh() } });
+  $('#pins').addEventListener('mouseout', e => { if(e.target.closest('.pin')) scheduleHide() });
+  $('#tip').addEventListener('mouseenter', () => clearTimeout(hideT));
+  $('#tip').addEventListener('mouseleave', scheduleHide);
+  /* Клик по пустому месту карты — закрыть карточку */
+  if(!cal) $('#map').addEventListener('click', e => { if(e.target.closest('.pin,.tip')) return; sel=null; hov=null; refresh() });
+
   if(cal){
     const drawCal = () => { $('#cal').innerHTML = `<b>Режим разметки</b><span>Выберите билборд, затем кликните на карте — он встанет на место. Потом нажмите «Скопировать» и вставьте координаты в BB_POS.</span>
       <div class="acts"><select id="cs"><option value="">— билборд —</option>${BB.map(b=>`<option value="${b.n}" ${String(b.n)===cur?'selected':''}>${pos[b.n]?'✓ ':''}${b.title}</option>`).join('')}</select>
@@ -390,11 +423,12 @@ function initBillboards(){
       $('#cs').onchange = e => { cur=e.target.value; drawCal() };
       $('#ce').onclick = () => { const t='const BB_POS = {\n'+Object.entries(pos).sort((x,y)=>x[0]-y[0]).map(([k,v])=>`  ${k}:[${v}],`).join('\n')+'\n};';
         navigator.clipboard?.writeText(t).then(()=>toast('Координаты скопированы'),()=>prompt('Скопируйте:',t)) } };
-    $('#map').onclick = e => { if(!cur) return; const r=e.currentTarget.getBoundingClientRect();
+    $('#map').onclick = e => { if(!cur || e.target.closest('.pin,.tip')) return; const r=e.currentTarget.getBoundingClientRect();
       pos[cur]=[+((e.clientX-r.left)/r.width*100).toFixed(1),+((e.clientY-r.top)/r.height*100).toFixed(1)];
       const i=BB.findIndex(b=>String(b.n)===cur); cur=BB[i+1]?String(BB[i+1].n):''; drawCal(); drawPins(); mark() };
     drawCal();
   }
+  addEventListener('resize', () => { if(document.body.contains(box)) refresh() });
   drawList();
 }
 
