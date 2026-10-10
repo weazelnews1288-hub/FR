@@ -8,12 +8,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
 <!-- Всё редактируемое — блок «НАСТРОЙКИ И КОНТЕНТ» в <script>. Ссылка на таблицу — CFG.sheetUrl. Ссылка на эфир — CFG.liveUrl. Цвета — :root в <style>. Файл должен называться index.html. -->
 <style>
-:root{--bg:#0a0a0d;--panel:#121216;--panel2:#1a1a20;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--green:#3fb765;--r:14px;--r2:10px;--pad:clamp(16px,3.4vw,96px);--fs-s:.875rem;--fs-l:1.125rem;color-scheme:dark}
+:root{--bg:#0a0a0d;--panel:#121216;--panel2:#1a1a20;--line:#25252c;--red:#d0141c;--red2:#e5222a;--text:#f4f4f6;--muted:#9a9aa6;--green:#3fb765;--r:14px;--r2:10px;--pad:clamp(16px,3.4vw,96px);--fs-s:.875rem;--fs-l:1.125rem;color-scheme:dark;
+/* КУРСОР-МИКРОФОН: обычный и «активный» (над кнопками и ссылками). Цвет микрофона — %23d0141c (это #d0141c). Точка клика — числа «8 5» */
+--cur:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(-35 16 16)'%3E%3Crect x='13.5' y='15' width='5' height='13' rx='2' fill='%23222228' stroke='%23ffffff' stroke-width='1.2'/%3E%3Crect x='12' y='2' width='8' height='13' rx='4' fill='%23d0141c' stroke='%23ffffff' stroke-width='1.4'/%3E%3Cpath d='M12.6 7.5h6.8M12.6 10.5h6.8' stroke='%23ffffff' stroke-opacity='.55' stroke-width='.9'/%3E%3C/g%3E%3C/svg%3E") 8 5, auto;
+--cur-on:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cg transform='rotate(-35 17 17)'%3E%3Cpath d='M7 6q-3.5 5 0 10M27 6q3.5 5 0 10' fill='none' stroke='%23ff2a33' stroke-width='1.6' stroke-linecap='round'/%3E%3Crect x='14.5' y='16' width='5' height='13' rx='2' fill='%23222228' stroke='%23ffffff' stroke-width='1.2'/%3E%3Crect x='13' y='3' width='8' height='13' rx='4' fill='%23ff2a33' stroke='%23ffffff' stroke-width='1.6'/%3E%3Cpath d='M13.6 8.5h6.8M13.6 11.5h6.8' stroke='%23ffffff' stroke-opacity='.7' stroke-width='.9'/%3E%3C/g%3E%3C/svg%3E") 9 6, pointer}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;font-size:clamp(14px,calc(10px + .5vw),30px);-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--text);font:1rem/1.6 'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden;display:flex;flex-direction:column}
 body::before{content:"";position:fixed;inset:0;z-index:-1;background:url(https://i.imgur.com/VL677mc.jpg) center/cover;opacity:.06}
-img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}
+/* КУРСОР: везде микрофон, над кликабельным — яркий микрофон, в полях ввода — текстовый */
+html,body,*{cursor:var(--cur)}
+a,a *,button,button *,select,label,summary,[role=button],[data-copy],[data-scroll],.opt,.opt *,.bbrow,.bbrow *,.pin,.arr,.chips button,.seg button{cursor:var(--cur-on)}
+input:not([type=checkbox]):not([type=radio]),textarea{cursor:text}
+.slider,.slider *,.slider.drag,.slider.drag *{cursor:var(--cur)}
 [hidden]{display:none!important}[id]{scroll-margin-top:5rem}
 :focus-visible{outline:2px solid var(--red2);outline-offset:3px}
 .wrap{width:100%;padding:0 var(--pad)}.cap{font-size:var(--fs-s);color:var(--muted)}
@@ -49,7 +57,7 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 
 /* КНОПКИ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.9rem;padding:.6rem 1.4rem;background:var(--red);border:1px solid var(--red);border-radius:var(--r2);font-weight:600;transition:background .15s,border-color .15s}
-.btn:hover{background:var(--red2);border-color:var(--red2)}.btn:disabled{opacity:.6;cursor:default}
+.btn:hover{background:var(--red2);border-color:var(--red2)}.btn:disabled{opacity:.6}
 .btn.ghost{background:transparent;border-color:#3a3a44}.btn.ghost:hover{background:#ffffff0d;border-color:#5a5a66}
 .btn.sm{min-height:2.4rem;padding:.35rem 1rem;font-size:.92rem}
 .acts{display:flex;gap:.7rem;flex-wrap:wrap}
@@ -78,16 +86,18 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .tag{font-size:.85rem;font-weight:600;color:var(--red2);margin-top:.4rem}
 .card h3{font-size:1.2rem;font-weight:600;line-height:1.35}.card p{color:var(--muted)}
 
-/* ЛЕНТА НОВОСТЕЙ (листается влево-вправо: мышью, пальцем, стрелками) */
-.arrows{display:flex;gap:.5rem;flex:none}
-.arr{width:2.9rem;height:2.9rem;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);border-radius:50%;font-size:1.3rem;line-height:1;transition:background .15s,border-color .15s}
-.arr:hover{background:var(--red);border-color:var(--red)}
-.slider{display:flex;gap:clamp(1rem,2vw,2.2rem);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;padding-bottom:.5rem;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain}
+/* ЛЕНТА НОВОСТЕЙ: стрелки полупрозрачные, стоят по бокам на самой ленте (листается мышью, пальцем, стрелками) */
+.sw{--cw:clamp(17rem,30vw,26rem);position:relative}
+.slider{display:flex;gap:clamp(1rem,2vw,2.2rem);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:.5rem;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain}
 .slider::-webkit-scrollbar{display:none}
-.slider .card{flex:0 0 clamp(17rem,30vw,26rem);scroll-snap-align:start}
+.slider .card{flex:0 0 var(--cw);scroll-snap-align:start}
 .slider img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
-.slider.drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+.slider.drag{scroll-snap-type:none;scroll-behavior:auto}
 .slider.drag a{pointer-events:none}
+.arr{position:absolute;top:calc(var(--cw) * 9 / 32);transform:translateY(-50%);z-index:5;width:3.2rem;height:3.2rem;display:grid;place-items:center;padding:0;background:rgba(10,10,13,.42);border:1px solid rgba(255,255,255,.2);border-radius:50%;color:#fff;font-size:1.4rem;line-height:1;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);transition:background .18s,border-color .18s,opacity .18s,transform .18s}
+.arr.prev{left:.7rem}.arr.next{right:.7rem}
+.arr:hover{background:rgba(208,20,28,.78);border-color:rgba(255,255,255,.45);transform:translateY(-50%) scale(1.07)}
+.arr.off{opacity:0;pointer-events:none}
 .dt{font-size:.8rem;color:var(--muted);margin-top:-.1rem}
 .new{display:inline-block;background:var(--red);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .5rem;border-radius:5px;margin-left:.5rem;vertical-align:middle}
 
@@ -173,7 +183,7 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 textarea.inp{min-height:6.5rem;resize:vertical}.inp:focus{border-color:var(--red2);outline:0}
 .sg{font-size:var(--fs-s);color:var(--muted);margin:.6rem 0 .4rem}
 .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.5rem}
-.opt{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border:1px solid var(--line);border-radius:var(--r2);background:transparent;cursor:pointer;font-size:.95rem;line-height:1.35}
+.opt{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border:1px solid var(--line);border-radius:var(--r2);background:transparent;font-size:.95rem;line-height:1.35}
 .opt:hover{border-color:#44444f}.opt:has(input:checked){border-color:var(--red2);background:#d0141c14}
 .opt input{accent-color:var(--red2);width:1.1rem;height:1.1rem;flex:none}.opt small{margin-left:auto;color:var(--muted);white-space:nowrap;padding-left:.4rem}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
@@ -195,7 +205,7 @@ footer nav{height:auto;gap:1.2rem}footer nav a{font-size:.875rem;border:0;margin
  .hero-r{min-height:18rem}
  .bbside{position:static;order:-1}
 }
-@media(max-width:640px){.tp{grid-template-columns:4.5rem 1fr}.av{width:4.5rem;height:4.5rem}.sh{flex-direction:column;align-items:flex-start}.search{max-width:none}.fgrid{grid-template-columns:1fr}.slider .card{flex-basis:82%}}
+@media(max-width:640px){.tp{grid-template-columns:4.5rem 1fr}.av{width:4.5rem;height:4.5rem}.sh{flex-direction:column;align-items:flex-start}.search{max-width:none}.fgrid{grid-template-columns:1fr}.sw{--cw:calc((100vw - 2 * var(--pad)) * .82)}.arr{width:2.7rem;height:2.7rem;font-size:1.2rem}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -254,7 +264,7 @@ const NEWS = [
     text:'Последний путь Ханны Юн.' },
   { date:'2026-10-08', tag:'Помощник Губернатора', title:'Новое расследование Weazel News', img:IMG('R6CoRVc'),
     text:'Офицеры в то же время начали ограничивать действия жителей Los-Santos, остающихся на месте происшествия — неоднократно предлагая тем забрать свои транспортные средства и покинуть территорию.' },
-  /* >>> ТРИ НОВЫХ БЛОКА (замените заголовок, текст и картинку на свои) <<< */
+  /* >>> ТРИ БЛОКА-ЗАГОТОВКИ (замените заголовок, текст и картинку на свои) <<< */
   { date:'2026-10-07', tag:'Новости', title:'Четвёртая новость', img:IMG('QbtGLMP'),
     text:'Здесь будет текст четвёртой новости. Замените его на свой.' },
   { date:'2026-10-06', tag:'Новости', title:'Пятая новость', img:IMG('yA1rHvK'),
@@ -336,9 +346,12 @@ const VIEWS = {
         <div class="hero-cap"><h3>Лос-Сантос сегодня</h3><span class="cap">Больше, чем просто город</span></div></div>
     </section>
     <section class="blk" id="news"><div class="wrap">
-      <div class="sh"><div><h2>Последние новости</h2><p>Самые свежие — слева. Листайте вправо, чтобы увидеть более ранние.</p></div>
-        <div class="arrows" id="arrows"><button class="arr" type="button" data-slide="-1" aria-label="Назад">&#8592;</button><button class="arr" type="button" data-slide="1" aria-label="Вперёд">&#8594;</button></div></div>
-      <div class="slider" id="slider">${NEWS.map(newsCard).join('')}</div>
+      <div class="sh"><div><h2>Последние новости</h2><p>Самые свежие — слева. Листайте вправо, чтобы увидеть более ранние.</p></div></div>
+      <div class="sw" id="sw">
+        <button class="arr prev off" type="button" data-slide="-1" aria-label="Назад">&#8592;</button>
+        <div class="slider" id="slider">${NEWS.map(newsCard).join('')}</div>
+        <button class="arr next" type="button" data-slide="1" aria-label="Вперёд">&#8594;</button>
+      </div>
     </div></section>`,
 
   billboards: () => `
@@ -383,11 +396,18 @@ const VIEWS = {
 };
 
 /* ---- ЛОГИКА ---- */
-/* Лента новостей: перетаскивание мышью (пальцем листается само), стрелки, скрытие стрелок если всё помещается */
+/* Лента новостей: перетаскивание мышью (пальцем листается само), стрелки по бокам, стрелки прячутся на краях и если всё помещается */
 function initSlider(){
-  const s = $('#slider'); if(!s) return;
-  const arrows = $('#arrows');
-  const toggle = () => { if(arrows) arrows.hidden = s.scrollWidth <= s.clientWidth + 4 };
+  const s = $('#slider'), w = $('#sw'); if(!s || !w) return;
+  const prev = w.querySelector('.prev'), next = w.querySelector('.next');
+  const gap = () => parseFloat(getComputedStyle(s).columnGap || 0) || 0;
+  const step = () => { const c = s.querySelector('.card'); return c ? c.offsetWidth + gap() : 300 };
+  const upd = () => {
+    const fit = s.scrollWidth <= s.clientWidth + 4;
+    prev.hidden = next.hidden = fit;
+    prev.classList.toggle('off', s.scrollLeft < 4);
+    next.classList.toggle('off', s.scrollLeft + s.clientWidth >= s.scrollWidth - 4);
+  };
   let down = false, moved = false, sx = 0, sl = 0;
   s.addEventListener('pointerdown', e => { if(e.pointerType !== 'mouse' || e.button !== 0) return;
     down = true; moved = false; sx = e.clientX; sl = s.scrollLeft });
@@ -397,14 +417,15 @@ function initSlider(){
   const end = () => { if(!down) return; down = false;
     if(moved){ s.classList.remove('drag');
       const cards = [...s.querySelectorAll('.card')];
-      if(cards.length){ const i = Math.round(s.scrollLeft / (cards[0].offsetWidth + parseFloat(getComputedStyle(s).columnGap || 0)));
+      if(cards.length){ const i = Math.round(s.scrollLeft / step());
         s.scrollTo({ left: cards[Math.min(Math.max(i,0),cards.length-1)].offsetLeft - s.offsetLeft, behavior:'smooth' }) } } };
   addEventListener('pointerup', end); addEventListener('pointercancel', end);
   s.addEventListener('click', e => { if(moved){ e.preventDefault(); e.stopPropagation(); moved = false } }, true);
-  if(arrows) arrows.onclick = e => { const b = e.target.closest('[data-slide]'); if(!b) return;
-    const c = s.querySelector('.card'); const step = c ? c.offsetWidth + parseFloat(getComputedStyle(s).columnGap || 0) : 300;
-    s.scrollBy({ left: +b.dataset.slide * step, behavior:'smooth' }) };
-  toggle(); addEventListener('resize', () => { if(document.body.contains(s)) toggle() });
+  w.addEventListener('click', e => { const b = e.target.closest('[data-slide]'); if(!b) return;
+    s.scrollBy({ left: +b.dataset.slide * step(), behavior:'smooth' }) });
+  s.addEventListener('scroll', upd, { passive:true });
+  addEventListener('resize', () => { if(document.body.contains(s)) upd() });
+  upd(); setTimeout(upd, 400);
 }
 
 /* Билборды: фильтр, поиск, список + карта с точками. Информация о билборде всплывает рядом с точкой при наведении (на телефоне — при нажатии).
