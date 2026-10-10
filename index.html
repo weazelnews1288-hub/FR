@@ -107,9 +107,9 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .st{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;padding:.25rem .75rem;border-radius:999px;background:#3fb76526;color:#6fd68c;white-space:nowrap;width:fit-content}
 .st::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:currentColor}.st.busy{background:#e5222a26;color:#ff7b80}
 .bbside{position:sticky;top:5.4rem;display:flex;flex-direction:column;gap:.8rem}
-.map{position:relative;border:1px solid var(--line);border-radius:var(--r);background:#16161b;user-select:none;scroll-margin-top:5rem}
-.map>img{width:100%;height:auto;border-radius:calc(var(--r) - 1px)}.mapempty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted);text-align:center;padding:1rem}
-.pins{position:absolute;inset:0;pointer-events:none}
+.map{position:relative;border:0;border-radius:0;background:transparent;user-select:none;scroll-margin-top:5rem}
+.map>img{width:100%;height:auto;border-radius:0}
+.mapempty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted);text-align:center;padding:1rem}
 /* РАЗМЕР ТОЧЕК: width/height — диаметр, font-size — цифра внутри, border — рамка */
 .pin{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);width:max(.95rem,13px);height:max(.95rem,13px);border-radius:50%;border:1px solid #fff;color:#fff;font-size:.5rem;line-height:1;font-weight:700;display:grid;place-items:center;padding:0;box-shadow:0 2px 6px #000a;transition:transform .15s,box-shadow .15s}
 .pin.free{background:#2f9e4a}.pin.busy{background:#c0392b}.pin.on{transform:translate(-50%,-50%) scale(1.5);z-index:3;box-shadow:0 0 0 3px #fff6}
