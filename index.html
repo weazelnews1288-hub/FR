@@ -78,6 +78,19 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .tag{font-size:.85rem;font-weight:600;color:var(--red2);margin-top:.4rem}
 .card h3{font-size:1.2rem;font-weight:600;line-height:1.35}.card p{color:var(--muted)}
 
+/* ЛЕНТА НОВОСТЕЙ (листается влево-вправо: мышью, пальцем, стрелками) */
+.arrows{display:flex;gap:.5rem;flex:none}
+.arr{width:2.9rem;height:2.9rem;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);border-radius:50%;font-size:1.3rem;line-height:1;transition:background .15s,border-color .15s}
+.arr:hover{background:var(--red);border-color:var(--red)}
+.slider{display:flex;gap:clamp(1rem,2vw,2.2rem);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;padding-bottom:.5rem;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain}
+.slider::-webkit-scrollbar{display:none}
+.slider .card{flex:0 0 clamp(17rem,30vw,26rem);scroll-snap-align:start}
+.slider img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
+.slider.drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+.slider.drag a{pointer-events:none}
+.dt{font-size:.8rem;color:var(--muted);margin-top:-.1rem}
+.new{display:inline-block;background:var(--red);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .5rem;border-radius:5px;margin-left:.5rem;vertical-align:middle}
+
 /* ШАПКА ВНУТРЕННИХ СТРАНИЦ */
 .pghead{background:#0d0d11;border-bottom:1px solid var(--line)}
 .pghead .wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:2rem clamp(2rem,5vw,6rem);align-items:center;padding-top:clamp(2rem,4vw,3.5rem);padding-bottom:clamp(2rem,4vw,3.5rem)}
@@ -182,7 +195,7 @@ footer nav{height:auto;gap:1.2rem}footer nav a{font-size:.875rem;border:0;margin
  .hero-r{min-height:18rem}
  .bbside{position:static;order:-1}
 }
-@media(max-width:640px){.tp{grid-template-columns:4.5rem 1fr}.av{width:4.5rem;height:4.5rem}.sh{flex-direction:column;align-items:flex-start}.search{max-width:none}.fgrid{grid-template-columns:1fr}}
+@media(max-width:640px){.tp{grid-template-columns:4.5rem 1fr}.av{width:4.5rem;height:4.5rem}.sh{flex-direction:column;align-items:flex-start}.search{max-width:none}.fgrid{grid-template-columns:1fr}.slider .card{flex-basis:82%}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -231,15 +244,17 @@ const CFG = {
 };
 /* ТОЧКИ НА КАРТЕ: номер: [слева %, сверху %]. Режим разметки: открыть сайт с ?calibrate в конце адреса */
 const BB_POS = { 1:[38.4,29.1], 2:[52.0,41.7], 3:[14.5,33.2], 4:[32.0,41.7], 5:[42.0,41.7], 6:[52.0,41.7], 7:[52.0,41.7], 8:[22.0,41.7], 9:[12.0,41.7], 10:[72.0,41.7], 11:[82.0,41.7], 12:[92.0,41.7], 13:[52.0,11.7], 14:[52.0,21.7], 15:[52.0,31.7], 16:[52.0,51.7], 17:[52.0,61.7], 18:[52.0,71.7], 19:[52.0,81.7] };
-/* НОВОСТИ (главная + бегущая строка): tag — метка, title — заголовок, text — описание, img — картинка */
+/* НОВОСТИ (главная + бегущая строка): date — дата ГГГГ-ММ-ДД, tag — метка, title — заголовок, text — описание, img — картинка.
+   Порядок в списке не важен: новости сортируются по дате сами — самые новые стоят первыми, старые уходят вправо.
+   Новая новость: добавьте блок { date:'2026-10-11', ... } — она окажется в начале ленты. */
 const NEWS = [
-  { tag:'Новости', title:'Главные события дня', img:IMG('QbtGLMP'),
+  { date:'2026-10-10', tag:'Новости', title:'Главные события дня', img:IMG('QbtGLMP'),
     text:'Граждане рабочих мест нашего города собрались для митинга с целью выдвинуть свои требования.' },
-  { tag:'Похороны', title:'Что происходит в городе', img:IMG('yA1rHvK'),
+  { date:'2026-10-09', tag:'Похороны', title:'Что происходит в городе', img:IMG('yA1rHvK'),
     text:'Последний путь Ханны Юн.' },
-  { tag:'Помощник Губернатора', title:'Новое расследование Weazel News', img:IMG('R6CoRVc'),
+  { date:'2026-10-08', tag:'Помощник Губернатора', title:'Новое расследование Weazel News', img:IMG('R6CoRVc'),
     text:'Офицеры в то же время начали ограничивать действия жителей Los-Santos, остающихся на месте происшествия — неоднократно предлагая тем забрать свои транспортные средства и покинуть территорию.' },
-];
+].sort((a,b) => String(b.date).localeCompare(String(a.date)));
 /* БИЛБОРДЫ: [номер, улица, код, статус (1 — свободен, 0 — занят), описание (можно не указывать)]. D и P — сокращения */
 const D = 'Отличная видимость с основной магистрали города.', P = 'Шоссе Дель-Перро';
 const BB = [
@@ -261,7 +276,7 @@ const PRICES = [
 const TEAM = [
   { name:'Molly Mercantile', role:'Главный редактор', phone:'370-1077', img:'',
     text:'Отвечает за выпуск новостей и рекламные заказы. Пишите ей по любым вопросам сотрудничества.' },
-  { name:'Ify Jelani', role:'Заместитель главного редактора', phone:'872-8988', img:'',
+  { name:'Ify Jelani', role:'Репортёр и фотограф', phone:'872-8988', img:'',
     text:'Ведёт съёмки, репортажи и интервью. Принимает заказы на фотосессии и видео.' },
 ];
 /* ================================================================================ */
@@ -269,12 +284,13 @@ const TEAM = [
 /* ВКЛАДКИ: ['адрес', 'название в меню']. Новая вкладка: добавьте сюда и в VIEWS ниже */
 const PAGES = [['home','Главная'],['billboards','Билборды'],['contacts','Контакты'],['prices','Цены и услуги']];
 const $ = s => document.querySelector(s);
-const img = (src, alt='') => src ? `<img src="${src}" alt="${alt}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+const img = (src, alt='') => src ? `<img src="${src}" alt="${alt}" loading="lazy" referrerpolicy="no-referrer" draggable="false" onerror="this.remove()">` : '';
 const ml = t => t.split('\n').filter(Boolean);
 const tel = p => 'tel:' + p.replace(/[^\d+]/g, '');
 const plural = (n,a,b,c) => { const m=n%100, d=n%10; return m>10&&m<20 ? c : d===1 ? a : d>1&&d<5 ? b : c };
+const fmtDate = d => { const m = String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? `${m[3]}.${m[2]}.${m[1]}` : '' };
 
-const newsCard = n => `<article class="card"><div class="im">${img(n.img,n.title)}</div><div class="tag">${n.tag}</div><h3>${n.title}</h3><p>${n.text}</p></article>`;
+const newsCard = (n, i) => `<article class="card"><div class="im">${img(n.img,n.title)}</div><div class="tag">${n.tag}${i===0?'<span class="new">Новое</span>':''}</div><h3>${n.title}</h3>${n.date?`<div class="dt">${fmtDate(n.date)}</div>`:''}<p>${n.text}</p></article>`;
 // Шапка внутренней страницы: pghead(заголовок, текст, кнопки, блок справа)
 const pghead = (t, lead, acts='', aside='') => `<section class="pghead"><div class="wrap"><div><h1>${t}</h1>${lead?`<p class="lead">${lead}</p>`:''}${acts?`<div class="acts">${acts}</div>`:''}</div>${aside?`<div>${aside}</div>`:''}</div></section>`;
 const phones = cls => TEAM.map(p => `<a class="btn ${cls} sm" href="${tel(p.phone)}">${p.name.split(' ')[0]}: ${p.phone}</a>`).join('');
@@ -313,8 +329,9 @@ const VIEWS = {
         <div class="hero-cap"><h3>Лос-Сантос сегодня</h3><span class="cap">Больше, чем просто город</span></div></div>
     </section>
     <section class="blk" id="news"><div class="wrap">
-      <div class="sh"><div><h2>Последние новости</h2><p>Самые свежие события Weazel News</p></div></div>
-      <div class="grid">${NEWS.map(newsCard).join('')}</div>
+      <div class="sh"><div><h2>Последние новости</h2><p>Самые свежие — слева. Листайте вправо, чтобы увидеть более ранние.</p></div>
+        <div class="arrows" id="arrows"><button class="arr" type="button" data-slide="-1" aria-label="Назад">&#8592;</button><button class="arr" type="button" data-slide="1" aria-label="Вперёд">&#8594;</button></div></div>
+      <div class="slider" id="slider">${NEWS.map(newsCard).join('')}</div>
     </div></section>`,
 
   billboards: () => `
@@ -359,6 +376,30 @@ const VIEWS = {
 };
 
 /* ---- ЛОГИКА ---- */
+/* Лента новостей: перетаскивание мышью (пальцем листается само), стрелки, скрытие стрелок если всё помещается */
+function initSlider(){
+  const s = $('#slider'); if(!s) return;
+  const arrows = $('#arrows');
+  const toggle = () => { if(arrows) arrows.hidden = s.scrollWidth <= s.clientWidth + 4 };
+  let down = false, moved = false, sx = 0, sl = 0;
+  s.addEventListener('pointerdown', e => { if(e.pointerType !== 'mouse' || e.button !== 0) return;
+    down = true; moved = false; sx = e.clientX; sl = s.scrollLeft });
+  addEventListener('pointermove', e => { if(!down) return; const dx = e.clientX - sx;
+    if(!moved && Math.abs(dx) > 5){ moved = true; s.classList.add('drag') }
+    if(moved) s.scrollLeft = sl - dx });
+  const end = () => { if(!down) return; down = false;
+    if(moved){ s.classList.remove('drag');
+      const cards = [...s.querySelectorAll('.card')];
+      if(cards.length){ const i = Math.round(s.scrollLeft / (cards[0].offsetWidth + parseFloat(getComputedStyle(s).columnGap || 0)));
+        s.scrollTo({ left: cards[Math.min(Math.max(i,0),cards.length-1)].offsetLeft - s.offsetLeft, behavior:'smooth' }) } } };
+  addEventListener('pointerup', end); addEventListener('pointercancel', end);
+  s.addEventListener('click', e => { if(moved){ e.preventDefault(); e.stopPropagation(); moved = false } }, true);
+  if(arrows) arrows.onclick = e => { const b = e.target.closest('[data-slide]'); if(!b) return;
+    const c = s.querySelector('.card'); const step = c ? c.offsetWidth + parseFloat(getComputedStyle(s).columnGap || 0) : 300;
+    s.scrollBy({ left: +b.dataset.slide * step, behavior:'smooth' }) };
+  toggle(); addEventListener('resize', () => { if(document.body.contains(s)) toggle() });
+}
+
 /* Билборды: фильтр, поиск, список + карта с точками. Информация о билборде всплывает рядом с точкой при наведении (на телефоне — при нажатии).
    ?calibrate — режим разметки точек */
 function initBillboards(){
@@ -443,6 +484,7 @@ function route(){
   $('#app').innerHTML = VIEWS[cur]();
   document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.p===cur));
   document.title = (cur==='home' ? '' : PAGES.find(p=>p[0]===cur)[1]+' — ') + 'Weazel News';
+  if(cur==='home') initSlider();
   if(cur==='billboards') initBillboards();
   window.scrollTo(0,0);
   if(after){ const t=after; after=''; setTimeout(()=>document.getElementById(t)?.scrollIntoView(),0) }
