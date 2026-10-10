@@ -110,8 +110,9 @@ nav a:hover,nav a.on{color:#fff}nav a.on{border-bottom-color:var(--red)}
 .map{position:relative;border:1px solid var(--line);border-radius:var(--r);background:#16161b;user-select:none;scroll-margin-top:5rem}
 .map>img{width:100%;height:auto;border-radius:calc(var(--r) - 1px)}.mapempty{aspect-ratio:16/9;display:grid;place-items:center;color:var(--muted);text-align:center;padding:1rem}
 .pins{position:absolute;inset:0;pointer-events:none}
-.pin{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);width:max(1.9rem,26px);height:max(1.9rem,26px);border-radius:50%;border:2px solid #fff;color:#fff;font-size:.75rem;font-weight:700;display:grid;place-items:center;padding:0;box-shadow:0 3px 10px #000a;transition:transform .15s,box-shadow .15s}
-.pin.free{background:#2f9e4a}.pin.busy{background:#c0392b}.pin.on{transform:translate(-50%,-50%) scale(1.35);z-index:3;box-shadow:0 0 0 4px #fff6}
+/* РАЗМЕР ТОЧЕК: width/height — диаметр, font-size — цифра внутри, border — рамка */
+.pin{position:absolute;pointer-events:auto;transform:translate(-50%,-50%);width:max(.95rem,13px);height:max(.95rem,13px);border-radius:50%;border:1px solid #fff;color:#fff;font-size:.5rem;line-height:1;font-weight:700;display:grid;place-items:center;padding:0;box-shadow:0 2px 6px #000a;transition:transform .15s,box-shadow .15s}
+.pin.free{background:#2f9e4a}.pin.busy{background:#c0392b}.pin.on{transform:translate(-50%,-50%) scale(1.5);z-index:3;box-shadow:0 0 0 3px #fff6}
 .hintcap{text-align:center}
 
 /* ВСПЛЫВАЮЩАЯ КАРТОЧКА У ТОЧКИ */
@@ -381,7 +382,7 @@ function initBillboards(){
     const t = $('#tip'), m = $('#map'), a = BB.find(b=>b.n===n); if(!t || !m || !a) return;
     t.innerHTML = `<span class="st ${a.free?'':'busy'}">${a.free?'Свободен':'Занят'}</span><h3>${a.title}</h3>${a.text?`<p>${a.text}</p>`:''}${a.free?'<a class="btn sm" href="#/prices" data-scroll-after="booking">Оставить заявку</a>':''}${pos[n]?'':'<p class="cap">Точка на карте пока не размечена.</p>'}`;
     t.classList.add('show');
-    const W = m.clientWidth, H = m.clientHeight, w = t.offsetWidth, h = t.offsetHeight, gap = 20, clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
+    const W = m.clientWidth, H = m.clientHeight, w = t.offsetWidth, h = t.offsetHeight, gap = 14, clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
     let left, top;
     if(!pos[n]){ left = (W-w)/2; top = (H-h)/2 }
     else{
